@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>My Profile</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="id_username" class="form-label">Username</label>
+            {{ form.username }}
+            {% if form.username.errors %}
+                <div class="text-danger">{{ form.username.errors }}</div>
+            {% endif %}
+        </div>
+        <div class="mb-3">
+            <label for="id_email" class="form-label">Email</label>
+            {{ form.email }}
+            {% if form.email.errors %}
+                <div class="text-danger">{{ form.email.errors }}</div>
+            {% endif %}
+        </div>
+        <div class="mb-3">
+            <label for="id_first_name" class="form-label">First name</label>
+            {{ form.first_name }}
+            {% if form.first_name.errors %}
+                <div class="text-danger">{{ form.first_name.errors }}</div>
+            {% endif %}
+        </div>
+        <div class="mb-3">
+            <label for="id_last_name" class="form-label">Last name</label>
+            {{ form.last_name }}
+            {% if form.last_name.errors %}
+                <div class="text-danger">{{ form.last_name.errors }}</div>
+            {% endif %}
+        </div>
+        <button type="submit" class="btn btn-success">Save changes</button>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    input.form-control {
+        border-radius: 10px;
+    }
+</style>
+{% endblock %}
