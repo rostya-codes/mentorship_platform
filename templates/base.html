@@ -1,0 +1,55 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Mentorship Platform{% endblock %}</title>
+
+    <!-- Bootstrap 5 Integration -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEJrDA9p0hS8t9YtsD6i2EkvH2TzOZ4cTj6FdpY9eGx6mZ5tbTj6Hcezv+M1V" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'index' %}">Mentorship Platform</a>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <!-- if user.is_authenticated -->
+                        <li class="nav-item me-3">
+                            <a class="nav-link" href="{% url 'profile' %}">Profile</a>
+                        </li>
+                        <li class="nav-item me-3">
+                            <a class="nav-link" href="{% url 'logout' %}">Log out</a>
+                        </li>
+                    <!-- else -->
+                        <li class="nav-item me-3">
+                            <a class="nav-link" href="{% url 'login' %}">Log in</a>
+                        </li>
+                        <li class="nav-item me-3">
+                            <a class="nav-link" href="{% url 'register' %}">Register</a>
+                        </li>
+                    <!-- endif -->
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Content Block -->
+    <div class="container mt-5">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <!-- JavaScript Integration -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pzjw8f+ua7Kw1TIq0BdX8l9nEsmVq3SCr5QxIbbTjeS0rNT6CmQhdh57xHe8hJmy" crossorigin="anonymous"></script>
+</body>
+
+</html>

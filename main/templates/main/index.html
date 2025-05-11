@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+  <!-- Hero Section -->
+  <div class="text-center mb-5">
+    <h1 class="display-4 font-weight-bold text-primary">Mentorship Platform</h1>
+    <p class="lead text-muted">Find a mentor, book consultations, and grow with professionals.</p>
+    {% if not user.is_authenticated %}
+      <a href="{% url 'register' %}" class="btn btn-primary btn-lg shadow-sm">Register Now</a>
+    {% endif %}
+  </div>
+
+  <!-- Mentor List Section -->
+  <div class="row">
+    {% for mentor in mentors %}
+      <div class="col-md-4 mb-4">
+        <div class="card shadow-sm border-light rounded h-100">
+          {% if mentor.photo %}
+            <img src="{{ mentor.photo.url }}" class="card-img-top rounded-top" alt="Mentor's photo">
+          {% else %}
+            <img src="{% static 'images/default_mentor.jpg' %}" class="card-img-top rounded-top" alt="Default Mentor Photo">
+          {% endif %}
+          <div class="card-body">
+            <h5 class="card-title text-dark">{{ mentor.username }}</h5>
+            <p class="card-text text-muted">{{ mentor.bio|truncatewords:20 }}</p>
+            <div class="d-flex justify-content-between">
+              {% if user.is_authenticated %}
+                <a href="{% url 'slot_list' %}" class="btn btn-success btn-sm shadow-sm">Book Consultation</a>
+              {% else %}
+                <a href="{% url 'login' %}" class="btn btn-outline-primary btn-sm shadow-sm">Login to Book</a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <div class="col-12 text-center">
+        <p>No mentors available yet.</p>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+<br>
+<hr>
+<!-- About Section -->
+<div class="container text-center my-5">
+    <h2>About the Mentorship Platform</h2>
+    <p class="lead">
+        Our platform connects talented individuals with experienced mentors to foster growth, development, and success.
+        Whether you’re seeking guidance for personal development, career advice, or skill improvement, our mentors are here to support you.
+        Join today and take the next step in your journey!
+    </p>
+    <p>
+        Mentorship is one of the most effective ways to accelerate your personal and professional growth. Our mentors come from diverse backgrounds and are ready to help you succeed. Start your journey now!
+    </p>
+</div>
+<br>
+<!-- Emoji Section -->
+<div class="text-center my-4">
+    <span style="font-size: 2rem;">🌱</span> <!-- Росток эмодзи -->
+</div>
+
+{% endblock %}

@@ -30,8 +30,8 @@ INSTALLED_APPS = [
 
     'main',
     'accounts',
-    'booking',
-    'admin_panel',
+    'dashboard',
+    'schedule',
 ]
 
 MIDDLEWARE = [
@@ -49,7 +49,7 @@ ROOT_URLCONF = 'mentorship_platform.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
