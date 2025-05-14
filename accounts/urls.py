@@ -1,9 +1,8 @@
-from django.urls import path
 from django.contrib.auth import views as auth_views
-from django.contrib.auth.views import LogoutView
+from django.urls import path
 
 from . import views
-from . forms import LoginForm
+from .forms import LoginForm
 
 urlpatterns = [
     path('register/', views.RegisterView.as_view(), name='register'),

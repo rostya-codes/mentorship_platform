@@ -43,9 +43,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name="Is Staff"
     )
 
-
     is_active = models.BooleanField(default=True)
-
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email']
