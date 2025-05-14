@@ -154,3 +154,39 @@ hr {
     border: 1px solid #ccc; /* Тонка лінія */
     margin: 20px 0; /* Відступи зверху і знизу */
 }
+
+.alert {
+    font-size: 16px;
+    margin-top: 20px;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+
+<style>
+    .btn-info {
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+    }
+    .btn-info:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 3px 6px rgba(0, 0, 0, 0.15);
+        transform: translateY(-2px);
+    }
+    .btn-info:active {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.08);
+        transform: translateY(1px);
+    }
+</style>
+
+<div class="text-center mt-4">
+    <a href="{% url 'slots_list' %}" class="btn btn-info btn-lg shadow-sm btn-block">
+        View All Slots
+    </a>
+</div>

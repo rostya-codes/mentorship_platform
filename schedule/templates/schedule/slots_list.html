@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Available Mentor Slots</h1>
+
+    {% if slots %}
+        <div class="row">
+            {% for slot in slots %}
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ slot.mentor.get_full_name }}</h5>
+                            <p class="card-text">
+                                <strong>Date:</strong> {{ slot.date }}<br>
+                                <strong>Time:</strong> {{ slot.time }}<br>
+                                <strong>Is booked:</strong> {% if slot.is_booked %}Yes{% else %}No{% endif %}
+                            </p>
+                            {% if not slot.is_booked %}
+                                <a href="{% url 'book_slot' slot.id %}" class="btn btn-primary">Book Now</a>
+                            {% else %}
+                                <button class="btn btn-secondary" disabled>Unavailable</button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-center">No available slots at the moment.</p>
+    {% endif %}
+</div>
+{% endblock %}

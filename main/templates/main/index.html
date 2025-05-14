@@ -36,12 +36,21 @@
         </div>
       </div>
     {% empty %}
+      <!--
       <div class="col-12 text-center">
         <p>No mentors available yet.</p>
       </div>
+      -->
     {% endfor %}
-  </div>
+    </div>
+
+    <!-- Button to view all slots -->
+    <div class="text-center mt-4">
+        <a href="{% url 'slots_list' %}" class="btn btn-info btn-lg shadow-sm">View All Slots</a>
+    </div>
+
 </div>
+
 <br>
 <hr>
 <!-- About Section -->
