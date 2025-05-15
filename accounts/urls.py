@@ -16,4 +16,7 @@ urlpatterns = [
     ),
     path('logout/', views.logout_user, name='logout'),
     path('profile/', views.ProfileView.as_view(), name='profile'),
+
+    # Email verification
+    path('email-verification/<uidb64>/<token>/', views.EmailVerificationView.as_view(), name='email-verification'),
 ]

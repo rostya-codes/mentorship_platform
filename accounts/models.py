@@ -26,6 +26,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name="Email Address"
     )
 
+    is_email_verified = models.BooleanField(default=False)
+
     phone_number = models.CharField(
         unique=True,
         blank=True,

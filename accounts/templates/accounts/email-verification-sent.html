@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container text-center mt-5">
+    <h2>Verification Email Sent</h2>
+    <p>Thank you for registering! Please check your email and click the link to activate your account.</p>
+    <a href="{% url 'login' %}" class="btn btn-primary mt-3">Go to Login Page</a>
+</div>
+{% endblock %}

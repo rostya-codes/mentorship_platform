@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container text-center mt-5">
+    <h2>Welcome!</h2>
+    <p>Your account has been successfully verified.</p>
+    <a href="{% url 'index' %}" class="btn btn-success mt-3">Go to Homepage</a>
+</div>
+{% endblock %}

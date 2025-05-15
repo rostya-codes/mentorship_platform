@@ -14,7 +14,7 @@ class SlotListView(View):
         if not slots:
             # Можна додати повідомлення, що немає доступних слотів
             messages.info(request, "No available slots at the moment.", extra_tags='info')
-        return render(request, 'schedule/slots_list.html', {'slots': slots})
+        return render(request, 'schedule/slots-list.html', {'slots': slots})
 
 
 class BookSlotView(View):
@@ -26,7 +26,7 @@ class BookSlotView(View):
         slot.is_booked = True
         slot.save()
         messages.success(request, 'Slot booked.', extra_tags='success')
-        return redirect('my_bookings')
+        return redirect('my-bookings')
 
 
 class CancelBookingView(View):
@@ -38,7 +38,7 @@ class CancelBookingView(View):
         booking.is_booked = False
         booking.save()
         messages.success(request, 'Slot canceled.', extra_tags='success')
-        return redirect('my_bookings')
+        return redirect('my-bookings')
 
 
 class MyBookingsView(View):
@@ -46,7 +46,7 @@ class MyBookingsView(View):
 
     def get(self, request, *args, **kwargs):
         bookings = Slot.objects.filter(user=request.user)
-        return render(request, 'schedule/my_bookings.html', {'bookings': bookings})
+        return render(request, 'schedule/my-bookings.html', {'bookings': bookings})
 
 
 class MentorSlotsView(View):

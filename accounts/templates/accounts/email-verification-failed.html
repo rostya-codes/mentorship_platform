@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container text-center mt-5">
+    <h2>Verification Error</h2>
+    <p>The link is invalid or has expired. Please try registering again.</p>
+    <a href="{% url 'register' %}" class="btn btn-danger mt-3">Register</a>
+</div>
+{% endblock %}
