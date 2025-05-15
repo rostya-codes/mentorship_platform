@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from config import SK, GMAIL_APP_PASSWORD, EMAIL_ADDRESS
+from config import EMAIL_ADDRESS, GMAIL_APP_PASSWORD, SK
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent

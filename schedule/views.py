@@ -1,7 +1,6 @@
 from django.contrib import messages
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect, render
 from django.views import View
-from pipenv.cli.options import keep_outdated_option
 
 from schedule.models import Slot
 

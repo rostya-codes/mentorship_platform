@@ -1,17 +1,13 @@
 from django.conf import settings
-from django.contrib.auth import login, logout, get_user_model
+from django.contrib.auth import get_user_model, login, logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail
 from django.shortcuts import redirect, render
-from django.template.loader import render_to_string
 from django.urls import reverse
-from django.utils.encoding import force_bytes
-from django.utils.http import urlsafe_base64_encode
 from django.views import View
 
 from .forms import RegisterForm, UpdateUserForm
-from .utils import generate_token, encode_uid, decode_uid, verify_token
+from .utils import decode_uid, encode_uid, generate_token, verify_token
 
 User = get_user_model()
 
@@ -30,7 +26,8 @@ class RegisterView(View):
 
             self.send_verification_email(request, user)
 
-            return render(request, 'accounts/email-verification-sent.html')  # Сторінка, що повідомляє про відправку листа
+            # Сторінка, що повідомляє про відправку листа
+            return render(request, 'accounts/email-verification-sent.html')
         return render(request, 'accounts/register.html', {'form': form})
 
     def send_verification_email(self, request, user):
@@ -41,7 +38,8 @@ class RegisterView(View):
         )
 
         subject = 'Confirm your email'
-        message = f'Hi {user.username},\n\nPlease verify your account by clicking the link below:\n{verification_link}\n\nThank you!'
+        message = (f'Hi {user.username},\n\nPlease verify your account by clicking the link below:\n{verification_link}'
+                   f'\n\nThank you!')
         send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user.email])
 
 
