@@ -15,8 +15,9 @@ SECRET_KEY = SK
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
+SITE_DOMAIN = 'http://127.0.0.1:8000'
 
 # Application definition
 
@@ -134,3 +135,8 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = EMAIL_ADDRESS
 EMAIL_HOST_PASSWORD = GMAIL_APP_PASSWORD
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+# Celery (через Redis)
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'

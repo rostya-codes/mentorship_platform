@@ -1,7 +1,10 @@
+from django.conf import settings
 from django.contrib import messages
+from django.core.mail import send_mail
 from django.shortcuts import redirect, render
 from django.views import View
 
+from mentorship_platform.tasks import send_booking_confirmation_email
 from schedule.models import Slot
 
 
@@ -21,9 +24,24 @@ class BookSlotView(View):
 
     def get(self, request, slot_id, *args, **kwargs):
         slot = Slot.objects.get(pk=slot_id)
-        slot.user = request.user
+        user = request.user
+        slot.user = user
         slot.is_booked = True
         slot.save()
+        message = (
+            f"Hi {request.user.first_name},\n\n"
+            f"Your slot with mentor {slot.mentor.get_full_name()} "
+            f"on {slot.date.strftime('%A, %B %d, %Y')} at {slot.time.strftime('%H:%M')} has been successfully booked.\n\n"
+            "If you have any questions, feel free to contact us.\n\n"
+            "Thank you for using our mentorship platform!"
+        )
+        send_booking_confirmation_email.delay(
+            user.email,
+            user.first_name,
+            slot.mentor.get_full_name(),
+            slot.date.isoformat(),
+            slot.time.strftime('%H:%M')
+        )
         messages.success(request, 'Slot booked.', extra_tags='success')
         return redirect('my-bookings')
 
