@@ -19,6 +19,8 @@ ALLOWED_HOSTS = ['*']
 
 SITE_DOMAIN = 'http://127.0.0.1:8000'
 
+LOGIN_URL = '/accounts/login/'
+
 # Application definition
 
 INSTALLED_APPS = [

@@ -1,13 +1,91 @@
-from django.shortcuts import render
+from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.http import Http404
+from django.shortcuts import render, redirect
+from django.utils.decorators import method_decorator
+from django.views import View
+
+from .forms import CreateSlotForm, UpdateSlotForm
+from schedule.models import Slot
+
+User = get_user_model()
 
 
-def dashboard(request):
-    pass
+class MentorSlotsView(View):
+    """ Відображає список слотів, створених ментором, з інформацією про бронювання """
+
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated or not request.user.is_mentor:
+            return render(request, '403.html', status=403)
+
+        slots = Slot.objects.filter(mentor=request.user).order_by('date', 'time')
+        return render(request, 'schedule/mentor-slots.html', {'slots': slots})
 
 
-def add_slot(request):
-    pass
+class CreateSlotView(View):
+    """ Створює слот для ментора """
+
+    def post(self, request):
+        if not request.user.is_authenticated or not request.user.is_mentor:
+            return render(request, '403.html', status=403)
+
+        form = CreateSlotForm(request.POST)
+        if form.is_valid():
+            slot = form.save(commit=False)
+            slot.mentor = request.user
+            slot.save()
+            return redirect('mentor-slots')
+        return render(request, 'schedule/create-slot.html', {'form': form})
+
+    def get(self, request, *args, **kwargs):
+        form = CreateSlotForm()
+        return render(request, 'schedule/create-slot.html', {'form': form})
 
 
-def users_list(request):
-    pass
+class UpdateSlotView(View):
+
+    def post(self, request, slot_id):
+        slot = Slot.objects.get(pk=slot_id)
+        form = UpdateSlotForm(request.POST, instance=slot)
+        if form.is_valid():
+            form.save()
+            return redirect('mentor-slots')
+        return render(request, 'schedule/update-slot.html', {'form': form})
+
+    def get(self, request, slot_id, *args, **kwargs):
+        slot = Slot.objects.get(pk=slot_id)
+        form = UpdateSlotForm(instance=slot)
+        return render(request, 'schedule/update-slot.html', {'form': form})
+
+
+class DeleteSlotView(View):
+
+    def post(self, request, slot_id):
+        try:
+            slot = Slot.objects.get(pk=slot_id)
+        except Slot.DoesNotExist:
+            raise Http404('Slot not found or you don\'t have permission')
+        slot.delete()
+        return redirect('mentor-slots')
+
+
+@method_decorator(login_required, name='dispatch')
+@method_decorator(user_passes_test(lambda u: u.is_staff), name='dispatch')  # тільки для адміністраторів
+class DashboardView(View):
+    """ Statistics displaying """
+
+    def get(self, request):
+        total_users = User.objects.count()
+        total_mentors = User.objects.filter(is_mentor=True).count()
+        total_slots = Slot.objects.count()
+        booked_slots = Slot.objects.filter(is_booked=True).count()
+        free_slots = Slot.objects.filter(is_booked=False).count()
+
+        context = {
+            'total_users': total_users,
+            'total_mentors': total_mentors,
+            'total_slots': total_slots,
+            'booked_slots': booked_slots,
+            'free_slots': free_slots,
+        }
+        return render(request, 'dashboard/dashboard.html', context)

@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.shortcuts import redirect, render
 from django.urls import reverse
+from django.utils.decorators import method_decorator
 from django.views import View
 
 from .forms import RegisterForm, UpdateUserForm
@@ -63,6 +64,7 @@ class EmailVerificationView(View):
             return render(request, 'accounts/email-verification-failed.html')
 
 
+@method_decorator(login_required, name='dispatch')
 class ProfileView(View):
     def get(self, request, *args, **kwargs):
         form = UpdateUserForm(instance=request.user)

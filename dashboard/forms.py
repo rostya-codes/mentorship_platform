@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth import get_user_model
 
-from . models import Slot
+from schedule.models import Slot
 
 User = get_user_model()
 

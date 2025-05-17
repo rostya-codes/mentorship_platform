@@ -1,13 +1,11 @@
 from django.contrib import messages
 from django.contrib.auth import get_user_model
-from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from django.http import Http404
 from django.shortcuts import redirect, render
 from django.views import View
 
 from mentorship_platform.tasks import send_booking_confirmation_email
-from schedule.forms import CreateSlotForm, UpdateSlotForm
 from schedule.models import Slot
 
 User = get_user_model()
@@ -24,6 +22,7 @@ class SlotListView(View):
         return render(request, 'schedule/slots-list.html', {'slots': slots})
 
 
+@method_decorator(login_required, name='dispatch')
 class BookSlotView(View):
     """ Обробляє бронювання слоту користувачем """
 
@@ -51,6 +50,7 @@ class BookSlotView(View):
         return redirect('my-bookings')
 
 
+@method_decorator(login_required, name='dispatch')
 class CancelBookingView(View):
     """ Дозволяє користувачу скасувати раніше зроблене бронювання """
 
@@ -63,69 +63,10 @@ class CancelBookingView(View):
         return redirect('my-bookings')
 
 
+@method_decorator(login_required, name='dispatch')
 class MyBookingsView(View):
     """ Відображає список консультацій, які користувач забронював """
 
     def get(self, request, *args, **kwargs):
         bookings = Slot.objects.filter(user=request.user)
         return render(request, 'schedule/my-bookings.html', {'bookings': bookings})
-
-
-class MentorSlotsView(View):
-    """ Відображає список слотів, створених ментором, з інформацією про бронювання """
-
-    def get(self, request, *args, **kwargs):
-        if not request.user.is_authenticated or not request.user.is_mentor:
-            return render(request, '403.html', status=403)
-
-        slots = Slot.objects.filter(mentor=request.user).order_by('date', 'time')
-        return render(request, 'schedule/mentor-slots.html', {'slots': slots})
-
-
-class CreateSlotView(View):
-    """ Створює слот для ментора """
-
-    def post(self, request):
-        if not request.user.is_authenticated or not request.user.is_mentor:
-            return render(request, '403.html', status=403)
-
-        form = CreateSlotForm(request.POST)
-        if form.is_valid():
-            slot = form.save(commit=False)
-            slot.mentor = request.user
-            slot.save()
-            return redirect('mentor-slots')
-        return render(request, 'schedule/create-slot.html', {'form': form})
-
-    def get(self, request, *args, **kwargs):
-        form = CreateSlotForm()
-        return render(request, 'schedule/create-slot.html', {'form': form})
-
-
-class UpdateSlotView(View):
-
-    def post(self, request, slot_id):
-        slot = Slot.objects.get(pk=slot_id)
-        form = UpdateSlotForm(request.POST, instance=slot)
-        if form.is_valid():
-            form.save()
-            return redirect('mentor-slots')
-        return render(request, 'schedule/update-slot.html', {'form': form})
-
-    def get(self, request, slot_id, *args, **kwargs):
-        slot = Slot.objects.get(pk=slot_id)
-        form = UpdateSlotForm(instance=slot)
-        return render(request, 'schedule/update-slot.html', {'form': form})
-
-
-class DeleteSlotView(View):
-
-    def post(self, request, slot_id):
-        try:
-            slot = Slot.objects.get(pk=slot_id)
-        except Slot.DoesNotExist:
-            raise Http404('Slot not found or you don\'t have permission')
-        slot.delete()
-        return redirect('mentor-slots')
-
-
