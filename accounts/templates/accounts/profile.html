@@ -36,6 +36,14 @@
         <br>
         <button type="submit" class="btn btn-success">Save changes</button>
     </form>
+
+    <br>
+
+    {% if user.is_mentor %}
+        <a href="{% url 'mentor-slots' %}" class="btn btn-primary">View my created slots</a>
+    {% else %}
+        <a href="{% url 'my-bookings' %}" class="btn btn-primary">View my bookings</a>
+    {% endif %}
 </div>
 {% endblock %}
 
@@ -46,3 +54,4 @@
     }
 </style>
 {% endblock %}
+

@@ -6,38 +6,46 @@
     <h1 class="text-center mb-4">My Slots</h1>
 
     <div class="mb-4 text-end">
-        <a href="{% url 'create_slot' %}" class="btn btn-success">Create New Slot</a>
+        <a href="{% url 'create-slot' %}" class="btn btn-success">Create New Slot</a>
     </div>
 
     {% if slots %}
         <div class="table-responsive">
-            <table class="table table-striped table-hover">
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Time</th>
-                        <th>Status</th>
-                        <th>Booked By</th>
+            <table class="table table-bordered align-middle text-center shadow-sm" style="border-collapse: separate; border-spacing: 0 10px;">
+                <thead class="table-light">
+                    <tr style="border: 2px solid #dee2e6;">
+                        <th class="px-4 py-3">Date</th>
+                        <th class="px-4 py-3">Time</th>
+                        <th class="px-4 py-3">Status</th>
+                        <th class="px-4 py-3">Booked By</th>
+                        <th class="px-4 py-3">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for slot in slots %}
-                        <tr>
-                            <td>{{ slot.date }}</td>
-                            <td>{{ slot.time }}</td>
-                            <td>
+                        <tr style="border: 2px solid #dee2e6; background-color: #fff;">
+                            <td class="px-4 py-3 border">{{ slot.date }}</td>
+                            <td class="px-4 py-3 border">{{ slot.time }}</td>
+                            <td class="px-4 py-3 border">
                                 {% if slot.is_booked %}
-                                    <span class="text-success">Booked</span>
+                                    <span class="badge bg-success">Booked</span>
                                 {% else %}
-                                    <span class="text-secondary">Available</span>
+                                    <span class="badge bg-secondary">Available</span>
                                 {% endif %}
                             </td>
-                            <td>
-                                {% if slot.booking %}
-                                    {{ slot.booking.user.get_full_name }}
+                            <td class="px-4 py-3 border">
+                                {% if slot.is_booked %}
+                                    {{ slot.user.get_full_name }}
                                 {% else %}
                                     -
                                 {% endif %}
+                            </td>
+                            <td class="px-4 py-3 border">
+                                <a href="{% url 'update-slot' slot.id %}" class="btn btn-sm btn-primary me-1">Edit</a>
+                                <a href="{% url 'delete-slot' slot.id %}" class="btn btn-sm text-danger border-danger"
+                                   onclick="return confirm('Are you sure you want to delete this slot?');">
+                                    Delete
+                                </a>
                             </td>
                         </tr>
                     {% endfor %}

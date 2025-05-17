@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2 class="mb-4">Update Slot</h2>
+
+  <form method="post">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="id_user" class="form-label">User</label>
+      {{ form.user }}
+    </div>
+
+    <div class="mb-3">
+      <label for="id_is_booked" class="form-label">Is Booked</label>
+      <div class="form-check">
+        {{ form.is_booked }}
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="id_date" class="form-label">Date</label>
+      {{ form.date }}
+    </div>
+
+    <div class="mb-3">
+      <label for="id_time" class="form-label">Time</label>
+      {{ form.time }}
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <a href="{% url 'slots-list' %}" class="btn btn-secondary">Cancel</a>
+  </form>
+</div>
+{% endblock %}

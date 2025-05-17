@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Create New Slot</h2>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label for="id_date" class="form-label">Date</label>
+            {{ form.date }}
+            {% if form.date.errors %}
+                <div class="text-danger">{{ form.date.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="mb-3">
+            <label for="id_time" class="form-label">Time</label>
+            {{ form.time }}
+            {% if form.time.errors %}
+                <div class="text-danger">{{ form.time.errors }}</div>
+            {% endif %}
+        </div>
+
+        <br>
+
+        <button type="submit" class="btn btn-primary">Create Slot</button>
+    </form>
+</div>
+{% endblock %}
