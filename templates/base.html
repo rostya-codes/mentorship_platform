@@ -23,6 +23,11 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     {% if user.is_authenticated %}
+                        {% if user.is_mentor %}
+                            <li class="nav-item me-3">
+                                <a class="nav-link btn btn-outline-secondary" href="{% url 'dashboard' %}">Dashboard</a>
+                            </li>
+                        {% endif %}
                         <li class="nav-item me-3">
                             <a class="nav-link btn btn-primary" href="{% url 'profile' %}">Profile</a>
                         </li>

@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Admin Dashboard</h2>
+    <ul class="list-group mt-4">
+        <li class="list-group-item d-flex justify-content-between">
+            <strong>Total users:</strong> {{ total_users }}
+        </li>
+        <li class="list-group-item d-flex justify-content-between">
+            <strong>Total mentors:</strong> {{ total_mentors }}
+        </li>
+        <li class="list-group-item d-flex justify-content-between">
+            <strong>Total slots:</strong> {{ total_slots }}
+        </li>
+        <li class="list-group-item d-flex justify-content-between">
+            <strong>Booked slots:</strong> {{ booked_slots }}
+        </li>
+        <li class="list-group-item d-flex justify-content-between">
+            <strong>Free slots:</strong> {{ free_slots }}
+        </li>
+    </ul>
+</div>
+{% endblock %}
