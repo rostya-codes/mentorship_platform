@@ -3,8 +3,23 @@
 {% block content %}
 <div class="container mt-5">
     <h2>My Profile</h2>
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">  {# важливо для завантаження файлів #}
         {% csrf_token %}
+
+        {% if user.image %}
+            <div class="mb-3">
+                <img src="{{ user.image.url }}" alt="Profile picture" width="150" class="rounded-circle">
+            </div>
+        {% endif %}
+
+        <div class="mb-3">
+            <label for="id_profile_picture" class="form-label">Profile picture</label>
+            {{ form.image }}
+            {% if form.image.errors %}
+                <div class="text-danger">{{ form.image.errors }}</div>
+            {% endif %}
+        </div>
+
         <div class="mb-3">
             <label for="id_username" class="form-label">Username</label>
             {{ form.username }}
@@ -33,6 +48,7 @@
                 <div class="text-danger">{{ form.last_name.errors }}</div>
             {% endif %}
         </div>
+
         <br>
         <button type="submit" class="btn btn-success">Save changes</button>
     </form>
@@ -54,4 +70,3 @@
     }
 </style>
 {% endblock %}
-

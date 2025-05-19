@@ -1,7 +1,9 @@
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
+from django.db.models import Avg
 
 from accounts.managers import CustomUserManager
+from reviews.models import Review
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -35,6 +37,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name="Phone Number"
     )
 
+    image = models.ImageField(upload_to='accounts_images', null=True, blank=True)
+
     is_mentor = models.BooleanField(
         default=False,
         verbose_name="Is Mentor"
@@ -57,3 +61,6 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def get_full_name(self):
         return f"{self.first_name} {self.last_name}"
+
+    def get_average_rating(self):
+        return int(Review.objects.filter(mentor=self).aggregate(Avg('rating'))['rating__avg'] or 0)

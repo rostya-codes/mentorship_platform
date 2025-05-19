@@ -71,7 +71,7 @@ class ProfileView(View):
         return render(request, 'accounts/profile.html', {'form': form})
 
     def post(self, request):
-        form = UpdateUserForm(request.POST, instance=request.user)
+        form = UpdateUserForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
             form.save()
             return redirect('profile')

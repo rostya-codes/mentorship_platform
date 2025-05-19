@@ -16,7 +16,8 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('schedule/', include('schedule.urls')),
     path('dashboard/', include('dashboard.urls')),
-]
+    path('reviews/', include('reviews.urls'))
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

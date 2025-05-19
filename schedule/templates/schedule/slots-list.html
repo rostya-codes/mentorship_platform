@@ -11,7 +11,29 @@
                 <div class="col-md-4 mb-4">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">{{ slot.mentor.get_full_name }}</h5>
+
+                            <div class="card mb-3 shadow-sm">
+                                <div class="row g-0">
+                                    <div class="col-md-2">
+                                        <img src="{{ mentor.photo.url }}" class="img-fluid rounded-start" alt="{{ mentor.get_full_name }}">
+                                    </div>
+                                    <div class="col-md-10">
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{ slot.mentor.get_full_name }}</h5>
+                                            <p class="card-text">
+                                                ⭐ Average Rating:
+                                                {% if slot.mentor.get_average_rating %}
+                                                    {{ slot.mentor.get_average_rating }}/5
+                                                {% else %}
+                                                    No ratings yet
+                                                {% endif %}
+                                            </p>
+                                            <a href="{% url 'mentor-profile' slot.mentor.id %}" class="btn btn-outline-primary">View Profile</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <p class="card-text">
                                 <strong>Date:</strong> {{ slot.date }}<br>
                                 <strong>Time:</strong> {{ slot.time }}<br>

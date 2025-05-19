@@ -35,11 +35,11 @@ class CreateSlotView(View):
             slot.mentor = request.user
             slot.save()
             return redirect('mentor-slots')
-        return render(request, 'schedule/create-slot.html', {'form': form})
+        return render(request, 'dashboard/create-slot.html', {'form': form})
 
     def get(self, request, *args, **kwargs):
         form = CreateSlotForm()
-        return render(request, 'schedule/create-slot.html', {'form': form})
+        return render(request, 'dashboard/create-slot.html', {'form': form})
 
 
 class UpdateSlotView(View):
@@ -50,12 +50,12 @@ class UpdateSlotView(View):
         if form.is_valid():
             form.save()
             return redirect('mentor-slots')
-        return render(request, 'schedule/update-slot.html', {'form': form})
+        return render(request, 'dashboard/update-slot.html', {'form': form})
 
     def get(self, request, slot_id, *args, **kwargs):
         slot = Slot.objects.get(pk=slot_id)
         form = UpdateSlotForm(instance=slot)
-        return render(request, 'schedule/update-slot.html', {'form': form})
+        return render(request, 'dashboard/update-slot.html', {'form': form})
 
 
 class DeleteSlotView(View):
