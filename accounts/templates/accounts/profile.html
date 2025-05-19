@@ -57,6 +57,7 @@
 
     {% if user.is_mentor %}
         <a href="{% url 'mentor-slots' %}" class="btn btn-primary">View my created slots</a>
+        <a href="{% url 'my-bookings' %}" class="btn btn-primary">View my bookings</a>
     {% else %}
         <a href="{% url 'my-bookings' %}" class="btn btn-primary">View my bookings</a>
     {% endif %}

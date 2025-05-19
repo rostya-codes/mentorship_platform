@@ -12,4 +12,3 @@ class Review(models.Model):
     mentor = ForeignKey(to='accounts.User', on_delete=models.SET_NULL, null=True, blank=True, related_name='review_mentor')
     user = ForeignKey(to='accounts.User', on_delete=models.SET_NULL, null=True, blank=True, related_name='review_user')
     created_at = models.DateTimeField(auto_now_add=True)
-

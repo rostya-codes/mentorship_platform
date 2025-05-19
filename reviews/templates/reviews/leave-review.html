@@ -6,14 +6,29 @@
 
 <form method="post">
     {% csrf_token %}
+
     <div class="mb-3">
-        <label for="rating" class="form-label">Rating (1 to 5):</label>
-        <input type="number" name="rating" min="1" max="5" class="form-control" required>
+        <label class="form-label d-block">Rating:</label>
+        {% for radio in form.rating %}
+            <div class="form-check form-check-inline">
+                {{ radio.tag }}
+                {{ radio.choice_label }}
+            </div>
+        {% endfor %}
+        {% if form.rating.errors %}
+            <div class="text-danger">{{ form.rating.errors }}</div>
+        {% endif %}
     </div>
+
     <div class="mb-3">
-        <label for="comment" class="form-label">Comment:</label>
-        <textarea name="comment" class="form-control" rows="4" required></textarea>
+        {{ form.comment.label_tag }}
+        {{ form.comment }}
+        {% if form.comment.errors %}
+            <div class="text-danger">{{ form.comment.errors }}</div>
+        {% endif %}
     </div>
+
     <button type="submit" class="btn btn-primary">Submit Review</button>
 </form>
+
 {% endblock %}

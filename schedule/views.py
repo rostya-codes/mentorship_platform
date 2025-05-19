@@ -1,9 +1,12 @@
+from datetime import datetime
+
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.shortcuts import redirect, render
 from django.views import View
+from django.utils import timezone
 
 from mentorship_platform.tasks import send_booking_confirmation_email
 from schedule.models import Slot
@@ -68,5 +71,8 @@ class MyBookingsView(View):
     """ Відображає список консультацій, які користувач забронював """
 
     def get(self, request, *args, **kwargs):
-        bookings = Slot.objects.filter(user=request.user)
-        return render(request, 'schedule/my-bookings.html', {'bookings': bookings})
+        bookings = Slot.objects.filter(user=request.user).order_by('-date', '-time')
+        now = timezone.now()
+        for booking in bookings:
+            booking.slot_datetime = timezone.make_aware(datetime.combine(booking.date, booking.time))
+        return render(request, 'schedule/my-bookings.html', {'bookings': bookings, 'now': now})

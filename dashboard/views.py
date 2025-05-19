@@ -19,7 +19,7 @@ class MentorSlotsView(View):
             return render(request, '403.html', status=403)
 
         slots = Slot.objects.filter(mentor=request.user).order_by('date', 'time')
-        return render(request, 'schedule/mentor-slots.html', {'slots': slots})
+        return render(request, 'dashboard/mentor-slots.html', {'slots': slots})
 
 
 class CreateSlotView(View):

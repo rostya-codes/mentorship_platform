@@ -13,11 +13,15 @@
                         <div class="card-body">
                             <h5 class="card-title">Mentor: {{ booking.user.get_full_name }}</h5>
                             <p class="card-text">
-                                <strong>Date:</strong> {{ booking.slot.date }}<br>
-                                <strong>Time:</strong> {{ booking.slot.time }}<br>
+                                <strong>Date:</strong> {{ booking.date }}<br>
+                                <strong>Time:</strong> {{ booking.time }}<br>
                                 <strong>Is booked:</strong> {{ booking.is_booked }}
                             </p>
-                            <a href="{% url 'cancel-booking' booking.id %}" class="btn btn-danger">Cancel Booking</a>
+                            {% if booking.slot_datetime < now %}
+                                <a href="{% url 'leave-review' booking.id %}" class="btn btn-primary">Leave a Review</a>
+                            {% else %}
+                                <a href="{% url 'cancel-booking' booking.id %}" class="btn btn-danger">Cancel Booking</a>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
