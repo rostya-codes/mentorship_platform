@@ -9,6 +9,7 @@ from django.views import View
 from django.utils import timezone
 
 from mentorship_platform.tasks import send_booking_confirmation_email
+from reviews.models import Review
 from schedule.models import Slot
 
 User = get_user_model()

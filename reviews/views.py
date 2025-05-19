@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 
 from reviews.forms import LeaveReviewForm
@@ -22,7 +22,7 @@ class MentorProfileView(View):
 
 class LeaveReviewView(View):
     def post(self, request, booking_id):
-        booking = Slot.objects.get(pk=booking_id)
+        booking = get_object_or_404(Slot, pk=booking_id, user=request.user)
         mentor = booking.mentor
         form = LeaveReviewForm(request.POST)
         if form.is_valid():
@@ -31,4 +31,11 @@ class LeaveReviewView(View):
             review.user = request.user
             review.save()
             return redirect('my-bookings')
-        return render(request, 'reviews/leave-review.html', {'form': form})
+        return render(request, 'reviews/leave-review.html',
+                      {'form': form, 'slot': booking})
+    def get(self, request, booking_id):
+        booking = get_object_or_404(Slot, pk=booking_id, user=request.user)
+        form = LeaveReviewForm()
+        return render(request, 'reviews/leave-review.html',
+                      {'form': form, 'slot': booking}
+                      )
