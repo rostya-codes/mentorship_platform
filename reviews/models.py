@@ -9,6 +9,16 @@ class Review(models.Model):
         default=3
     )
     comment = models.TextField(max_length=1024, default='')
-    mentor = ForeignKey(to='accounts.User', on_delete=models.SET_NULL, null=True, blank=True, related_name='review_mentor')
-    user = ForeignKey(to='accounts.User', on_delete=models.SET_NULL, null=True, blank=True, related_name='review_user')
+    mentor = ForeignKey(
+        to='accounts.User', on_delete=models.SET_NULL,
+        null=True, blank=True, related_name='review_mentor'
+    )
+    user = ForeignKey(
+        to='accounts.User', on_delete=models.SET_NULL,
+        null=True, blank=True, related_name='review_user'
+    )
+    slot = models.OneToOneField(
+        to='schedule.Slot', on_delete=models.CASCADE,
+        null=True, blank=True, related_name='review_slot'
+    )
     created_at = models.DateTimeField(auto_now_add=True)

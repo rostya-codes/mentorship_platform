@@ -18,7 +18,11 @@
                                 <strong>Is booked:</strong> {{ booking.is_booked }}
                             </p>
                             {% if booking.slot_datetime < now %}
-                                <a href="{% url 'leave-review' booking.id %}" class="btn btn-primary">Leave a Review</a>
+                                {% if booking.review_slot %}
+                                    <p class="text-success fw-bold">Review submitted</p>
+                                {% else %}
+                                    <a href="{% url 'leave-review' booking.id %}" class="btn btn-primary">Leave a Review</a>
+                                {% endif %}
                             {% else %}
                                 <a href="{% url 'cancel-booking' booking.id %}" class="btn btn-danger">Cancel Booking</a>
                             {% endif %}

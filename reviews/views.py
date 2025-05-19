@@ -29,6 +29,7 @@ class LeaveReviewView(View):
             review = form.save(commit=False)
             review.mentor = mentor
             review.user = request.user
+            review.slot = booking
             review.save()
             return redirect('my-bookings')
         return render(request, 'reviews/leave-review.html',
