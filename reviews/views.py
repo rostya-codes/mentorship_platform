@@ -1,8 +1,9 @@
 from django.contrib.auth import get_user_model
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
+from django.contrib import messages
 
-from reviews.forms import LeaveReviewForm
+from reviews.forms import LeaveReviewForm, UpdateReviewForm
 from reviews.models import Review
 from schedule.models import Slot
 
@@ -40,3 +41,19 @@ class LeaveReviewView(View):
         return render(request, 'reviews/leave-review.html',
                       {'form': form, 'slot': booking}
                       )
+
+
+class UpdateReviewView(View):
+    def post(self, request, review_id):
+        review = get_object_or_404(Review, pk=review_id)
+        form = UpdateReviewForm(request.POST, instance=review)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Review edited.', extra_tags='success')
+            return redirect('my-bookings')
+        return render(request, 'reviews/update-review.html', {'form': form})
+
+    def get(self, request, review_id, *args, **kwargs):
+        review = get_object_or_404(Review, pk=review_id)
+        form = UpdateReviewForm(instance=review)
+        return render(request, 'reviews/update-review.html', {'form': form})

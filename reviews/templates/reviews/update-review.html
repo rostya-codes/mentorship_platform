@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h2 class="mb-4 text-center">Update Comment</h2>
+
+            <form method="post">
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    <label class="form-label d-block">Rating:</label>
+                    {% for radio in form.rating %}
+                        <div class="form-check form-check-inline">
+                            {{ radio.tag }}
+                            {{ radio.choice_label }}
+                        </div>
+                    {% endfor %}
+                    {% if form.rating.errors %}
+                        <div class="text-danger">{{ form.rating.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3">
+                    {{ form.comment.label_tag }}
+                    {{ form.comment }}
+                    {% if form.comment.errors %}
+                        <div class="text-danger">{{ form.comment.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <br>
+
+                <button type="submit" class="btn btn-primary">Update Review</button>
+            </form>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

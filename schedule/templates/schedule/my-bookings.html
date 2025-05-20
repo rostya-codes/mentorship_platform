@@ -20,6 +20,7 @@
                             {% if booking.slot_datetime < now %}
                                 {% if booking.review_slot %}
                                     <p class="text-success fw-bold">Review submitted</p>
+                                    <a href="{% url 'update-review' booking.review_slot.id %}" class="btn btn-primary">Edit your review</a>
                                 {% else %}
                                     <a href="{% url 'leave-review' booking.id %}" class="btn btn-primary">Leave a Review</a>
                                 {% endif %}
