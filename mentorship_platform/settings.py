@@ -2,17 +2,10 @@ from pathlib import Path
 
 from config import EMAIL_ADDRESS, GMAIL_APP_PASSWORD, SK
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = SK
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
@@ -20,8 +13,6 @@ ALLOWED_HOSTS = ['*']
 SITE_DOMAIN = 'http://127.0.0.1:8000'
 
 LOGIN_URL = '/accounts/login/'
-
-# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -31,6 +22,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'rest_framework',
+    'drf_yasg',
+
+    'api',
     'main',
     'accounts',
     'dashboard',
@@ -97,6 +92,16 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+    ]
+}
 
 
 # Internationalization
