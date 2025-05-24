@@ -14,12 +14,23 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class SlotSerializer(serializers.ModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(read_only=True)
     class Meta:
         model = Slot
         fields = '__all__'
+
+
+class SlotBookSerializer(serializers.Serializer):
+    slot_id = serializers.IntegerField()
 
 
 class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
         fields = '__all__'
+
+
+class CreateReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Review
+        fields = ('rating', 'comment')

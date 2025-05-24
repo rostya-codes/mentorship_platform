@@ -22,3 +22,6 @@ class Review(models.Model):
         null=True, blank=True, related_name='review_slot'
     )
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.pk} M: {self.mentor.username} U: {self.user.username}'

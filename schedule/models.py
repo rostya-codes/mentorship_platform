@@ -20,4 +20,4 @@ class Slot(models.Model):
         unique_together = ('mentor', 'date', 'time')
 
     def __str__(self):
-        return f"{self.mentor.username} - {self.date} {self.time} ({'Booked' if self.is_booked else 'Free'})"
+        return f"{self.pk} {self.mentor.username} - {self.date} {self.time} ({'Booked' if self.is_booked else 'Free'})"
