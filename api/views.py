@@ -4,6 +4,7 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from yaml import serialize
 
 from api.serializer import UserSerializer, ReviewSerializer, SlotSerializer, SlotBookSerializer, CreateReviewSerializer
 from reviews.models import Review
@@ -24,16 +25,28 @@ class UserViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     @swagger_auto_schema(
-        method='post',
-        responses={200: ReviewSerializer()},
+        method='get',
+        responses={200: ReviewSerializer(many=True)},
         operation_summary='View all mentor\'s reviews'
     )
-    @action(detail=True, methods=['get'], url_path='reviews')
-    def reviews(self, request):
+    @action(detail=True, methods=['get'], url_path='mentors_reviews')
+    def mentors_reviews(self, request):
         user = self.get_object()
         reviews = Review.objects.filter(mentor=user)
         serializer = ReviewSerializer(reviews, many=True)
         return Response({serializer.data}, status=status.HTTP_200_OK)
+
+    @swagger_auto_schema(
+        method='get',
+        responses={200: SlotSerializer(many=True)},
+        operation_summary='View all free mentor\'s slots'
+    )
+    @action(detail=True, methods=['get'], url_path='free_mentors_slots')
+    def free_mentors_slots(self, request):
+        user = self.get_object()
+        slots = Slot.objects.filter(user=user, is_booked=False)
+        serializer = SlotSerializer(slots, many=True)  # many=True обов'язково
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class SlotViewSet(viewsets.ModelViewSet):
@@ -119,3 +132,17 @@ class ReviewViewSet(viewsets.ModelViewSet):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
 
+
+
+"""
+
+Получить список свободных слотов по дате/ментору
+
+    Фильтр: показать все еще не забронированные слоты, например, у заданного ментора или на определённую дату.
+
+
+Посмотреть средний рейтинг ментора
+
+    Endpoint возвращает средний рейтинг и количество отзывов по ментору.
+
+"""
