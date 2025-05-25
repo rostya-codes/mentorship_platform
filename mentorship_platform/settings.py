@@ -31,7 +31,7 @@ INSTALLED_APPS = [
     'accounts',
     'dashboard',
     'schedule.apps.ScheduleConfig',
-    'reviews',
+    'reviews.apps.ReviewsConfig',
 ]
 
 MIDDLEWARE = [
