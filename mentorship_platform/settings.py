@@ -30,7 +30,7 @@ INSTALLED_APPS = [
     'main',
     'accounts',
     'dashboard',
-    'schedule',
+    'schedule.apps.ScheduleConfig',
     'reviews',
 ]
 

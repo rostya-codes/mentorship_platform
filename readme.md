@@ -108,5 +108,12 @@ mentorship_platform/
 └──
 
 
+to learn:
 
-todo: Сигналы Django и background-задачи (Celery, Django Q).
+signals,
+
+кастомные middleware,
+
+permissions & authentication,
+
+DRF: ViewSet, Serializer, GenericAPIView, throttling, filtering, pagination.
