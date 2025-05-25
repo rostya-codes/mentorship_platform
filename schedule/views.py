@@ -36,13 +36,6 @@ class BookSlotView(View):
         slot.user = user
         slot.is_booked = True
         slot.save()
-        message = (
-            f"Hi {request.user.first_name},\n\n"
-            f"Your slot with mentor {slot.mentor.get_full_name()} "
-            f"on {slot.date.strftime('%A, %B %d, %Y')} at {slot.time.strftime('%H:%M')} has been successfully booked.\n\n"
-            "If you have any questions, feel free to contact us.\n\n"
-            "Thank you for using our mentorship platform!"
-        )
         send_booking_confirmation_email.delay(
             user.email,
             user.first_name,
@@ -58,8 +51,8 @@ class BookSlotView(View):
 class CancelBookingView(View):
     """ Дозволяє користувачу скасувати раніше зроблене бронювання """
 
-    def get(self, request, *args, **kwargs):
-        booking = Slot.objects.get(user=request.user)
+    def get(self, request, booking_id, *args, **kwargs):
+        booking = Slot.objects.get(user=request.user, pk=booking_id)
         booking.user = None
         booking.is_booked = False
         booking.save()

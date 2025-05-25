@@ -129,7 +129,7 @@ SIMPLE_JWT = {
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Dublin'
 
 USE_I18N = True
 
@@ -171,3 +171,4 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 CELERY_BROKER_URL = 'redis://localhost:6379/0'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
+# CELERY_IMPORTS = ('mentorship_platform.tasks', 'schedule.tasks')
