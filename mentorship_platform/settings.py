@@ -101,7 +101,18 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
-    ]
+    ],
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle',
+        # 'rest_framework.throttling.ScopedRateThrottle',
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '5/minute',   # 10 запросов в минуту для анонимов
+        'user': '10/minute',    # 100 запросов в час для залогиненного юзера
+        # 'mentors_reviews': '5/minute',
+        # 'my_bookings': '10/minute'
+    }
 }
 
 

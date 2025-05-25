@@ -106,3 +106,7 @@ mentorship_platform/
 
 
 └──
+
+
+
+todo: Сигналы Django и background-задачи (Celery, Django Q).
