@@ -6,3 +6,4 @@ redis==6.1.0
 requests==2.32.0
 djangorestframework~=3.16.0
 drf-yasg~=1.21.10
+rest_framework_simplejwt

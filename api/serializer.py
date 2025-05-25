@@ -1,5 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, AuthUser
+from rest_framework_simplejwt.tokens import Token
 
 from reviews.models import Review
 from schedule.models import Slot
@@ -34,3 +36,28 @@ class CreateReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
         fields = ('rating', 'comment')
+
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user: AuthUser) -> Token:
+        """
+        Если расшифровать (декодировать) access-токен, внутри будет:
+        {
+            "token_type": "access",
+            "exp": 1234567890,
+            "jti": "...",
+            "user_id": 1,
+            "email": "user@example.com",
+            "first_name": "Ivan"
+        }
+        """
+        token = super().get_token(user)
+        token['email'] = user.email
+        token['first_name'] = user.first_name
+        return token
+
+
+class MentorsRatingSerializer(serializers.Serializer):
+    average_rating = serializers.FloatField()
+    reviews_count = serializers.IntegerField()

@@ -24,4 +24,4 @@ class Review(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'{self.pk} M: {self.mentor.username} U: {self.user.username}'
+        return f'{self.pk} M: {self.mentor.username} U: {self.user.username} | stars: {self.rating}'

@@ -1,11 +1,14 @@
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, authenticate
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework_simplejwt.tokens import RefreshToken
+from yaml import serialize
 
-from api.serializer import UserSerializer, ReviewSerializer, SlotSerializer, SlotBookSerializer, CreateReviewSerializer
+from api.serializer import UserSerializer, ReviewSerializer, SlotSerializer, SlotBookSerializer, CreateReviewSerializer, \
+    MyTokenObtainPairSerializer, MentorsRatingSerializer
 from reviews.models import Review
 from schedule.models import Slot
 
@@ -45,6 +48,24 @@ class UserViewSet(viewsets.ModelViewSet):
         user = self.get_object()
         slots = Slot.objects.filter(user=user, is_booked=False)
         serializer = SlotSerializer(slots, many=True)  # many=True обов'язково
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @swagger_auto_schema(
+        method='get',
+        responses={200: MentorsRatingSerializer()},
+        operation_summary='View mentor\'s average rating and review count'
+    )
+    @action(detail=True, methods=['get'], url_path='rating')
+    def rating(self, request, pk=None):
+        """
+        Посмотреть средний рейтинг ментора
+            Endpoint возвращает средний рейтинг и количество отзывов по ментору.
+        """
+        mentor = self.get_object()
+        average_rating = mentor.get_average_rating()
+        reviews_count = Review.objects.filter(mentor=mentor).count()
+        data = {'average_rating': average_rating, 'reviews_count': reviews_count}
+        serializer = MentorsRatingSerializer(data)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
@@ -132,11 +153,19 @@ class ReviewViewSet(viewsets.ModelViewSet):
     serializer_class = ReviewSerializer
 
 
-
-"""
-
-Посмотреть средний рейтинг ментора
-
-    Endpoint возвращает средний рейтинг и количество отзывов по ментору.
-
-"""
+class AuthViewSet(viewsets.ViewSet):
+    @action(detail=False, methods=['post'], url_path='token')
+    def obtain_token(self, request):
+        username = request.data.get('username')
+        password = request.data.get('password')
+        user = authenticate(username=username)
+        if user is not None:
+            refresh = RefreshToken.for_user(user)
+            data = {
+                'refresh': str(refresh),
+                'access': str(refresh.access_token),
+                'email': user.email,
+                'first_name': user.first_name,
+            }
+            return Response(data, status=status.HTTP_200_OK)
+        return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)

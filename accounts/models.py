@@ -63,4 +63,5 @@ class User(AbstractBaseUser, PermissionsMixin):
         return f"{self.first_name} {self.last_name}"
 
     def get_average_rating(self):
-        return int(Review.objects.filter(mentor=self).aggregate(Avg('rating'))['rating__avg'] or 0)
+        avg = Review.objects.filter(mentor=self).aggregate(Avg('rating'))['rating__avg'] or 0
+        return round(float(avg), 2)

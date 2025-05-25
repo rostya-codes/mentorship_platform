@@ -6,7 +6,9 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views import View
+from rest_framework_simplejwt.views import TokenObtainPairView
 
+from api.serializer import MyTokenObtainPairSerializer
 from .forms import RegisterForm, UpdateUserForm
 from .utils import decode_uid, encode_uid, generate_token, verify_token
 
@@ -82,3 +84,7 @@ class ProfileView(View):
 def logout_user(request):
     logout(request)
     return redirect('login')
+
+
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer

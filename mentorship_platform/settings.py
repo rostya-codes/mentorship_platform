@@ -1,3 +1,4 @@
+from datetime import timedelta
 from pathlib import Path
 
 from config import EMAIL_ADDRESS, GMAIL_APP_PASSWORD, SK
@@ -100,7 +101,8 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+        # Без токена можно только GET-запросы (чтение).
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',  # Если IsAuthenticated, то любой запрос требует токен.
     ],
     'DEFAULT_THROTTLE_CLASSES': [
         'rest_framework.throttling.AnonRateThrottle',
@@ -113,6 +115,12 @@ REST_FRAMEWORK = {
         # 'mentors_reviews': '5/minute',
         # 'my_bookings': '10/minute'
     }
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    # ... другие настройки ...
 }
 
 
