@@ -4,6 +4,8 @@ from django.http import Http404
 from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
 from django.views import View
+from django.views.generic import ListView
+from django.utils import timezone
 
 from .forms import CreateSlotForm, UpdateSlotForm
 from schedule.models import Slot
@@ -89,3 +91,33 @@ class DashboardView(View):
             'free_slots': free_slots,
         }
         return render(request, 'dashboard/dashboard.html', context)
+
+
+@method_decorator(login_required, name='dispatch')
+@method_decorator(user_passes_test(lambda u: u.is_staff), name='dispatch')  # тільки для адміністраторів
+class UsersList(ListView):
+    template_name = 'dashboard/users-list.html'
+    model = User
+    context_object_name = 'users'
+
+
+@method_decorator(login_required, name='dispatch')
+@method_decorator(user_passes_test(lambda u: u.is_staff), name='dispatch')  # тільки для адміністраторів
+class BanUser(View):
+    def get(self, request, user_id, *args, **kwargs):
+        user = User.objects.get(pk=user_id)
+        user.is_active = False
+        user.save()
+        return redirect('users-list')
+
+
+@method_decorator(login_required, name='dispatch')
+@method_decorator(user_passes_test(lambda u: u.is_staff), name='dispatch')  # тільки для адміністраторів
+class UnbanUser(View):
+    def get(self, request, user_id, *args, **kwargs):
+        user = User.objects.get(pk=user_id)
+        user.is_active = True
+        user.blocked_until = None
+        user.last_unblocked = timezone.now()
+        user.save()
+        return redirect('users-list')

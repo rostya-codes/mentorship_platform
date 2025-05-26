@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>All Users</h2>
+    <table class="table table-bordered mt-4">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Is Active</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.is_active }}</td>
+                <td>
+                    {% if user.is_active %}
+                        <a href="{% url 'ban-user' user.id %}" class="btn btn-danger btn-sm">Ban</a>
+                    {% else %}
+                        <a href="{% url 'unban-user' user.id %}" class="btn btn-success btn-sm">Unban</a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

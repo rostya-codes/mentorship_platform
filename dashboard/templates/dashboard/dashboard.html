@@ -4,9 +4,15 @@
 <div class="container mt-5">
     <h2>Admin Dashboard</h2>
     <ul class="list-group mt-4">
-        <li class="list-group-item d-flex justify-content-between">
-            <strong>Total users:</strong> {{ total_users }}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <strong>Total users:</strong>
+            <a href="{% url 'users-list' %}"
+               class="btn btn-warning btn-lg fw-bold shadow-lg border border-dark px-4 py-2"
+               style="animation: pulse 2s infinite;">
+                <i class="bi bi-people-fill me-2"></i> View All ({{ total_users }})
+            </a>
         </li>
+
         <li class="list-group-item d-flex justify-content-between">
             <strong>Total mentors:</strong> {{ total_mentors }}
         </li>

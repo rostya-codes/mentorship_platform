@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
 from django.db.models import Avg
+from django.utils import timezone
 
 from accounts.managers import CustomUserManager
 from reviews.models import Review
@@ -50,6 +51,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
 
     is_active = models.BooleanField(default=True)
+    blocked_until = models.DateTimeField(null=True, blank=True)
+    last_unblocked = models.DateTimeField(null=True, blank=True)
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email']
@@ -58,6 +61,11 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return f'{self.pk} {self.username}'
+
+    def is_blocked(self):
+        if self.blocked_until and self.blocked_until > timezone.now():
+            return True
+        return not self.is_active
 
     def get_full_name(self):
         return f"{self.first_name} {self.last_name}"
