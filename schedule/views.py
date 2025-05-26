@@ -10,7 +10,7 @@ from django.utils import timezone
 
 from mentorship_platform.tasks import send_booking_confirmation_email
 from reviews.models import Review
-from schedule.models import Slot
+from schedule.models import Slot, BookingLog
 
 User = get_user_model()
 
@@ -32,6 +32,10 @@ class BookSlotView(View):
 
     def get(self, request, slot_id, *args, **kwargs):
         slot = Slot.objects.get(pk=slot_id)
+        if slot.is_booked:
+            messages.error(request, 'Sorry, slot has already booked.', extra_tags='error')
+            return redirect('slots-list')
+
         user = request.user
         slot.user = user
         slot.is_booked = True
@@ -53,11 +57,17 @@ class CancelBookingView(View):
 
     def get(self, request, booking_id, *args, **kwargs):
         booking = Slot.objects.get(user=request.user, pk=booking_id)
+        # Логируем отмену до обнуления user
+        BookingLog.objects.create(
+            user=booking.user,
+            slot=booking,
+            action='cancel'
+        )
         booking.user = None
         booking.is_booked = False
         booking.save()
         messages.success(request, 'Slot canceled.', extra_tags='success')
-        return redirect('my-bookings')
+        return redirect('slots-list')
 
 
 @method_decorator(login_required, name='dispatch')

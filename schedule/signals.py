@@ -1,9 +1,9 @@
 from datetime import datetime, timedelta
 
 from django.utils import timezone
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
-from .models import Slot
+from .models import Slot, BookingLog
 from .tasks import remind_send_email_booking
 
 
@@ -48,6 +48,19 @@ def remind_user_about_slot(sender, instance, created, **kwargs):
                     'email': instance.user.email,
                 },
                 eta=remind_at
+            )
+
+
+@receiver(post_save, sender=Slot)
+def log_slot_booking(sender, instance, created, **kwargs):
+    # Логируем бронирование
+    if instance.is_booked and instance.user:
+        if not BookingLog.objects.filter(user=instance.user, slot=instance,
+                                         action='book').exists():
+            BookingLog.objects.create(
+                user=instance.user,
+                slot=instance,
+                action='book'
             )
 
 
