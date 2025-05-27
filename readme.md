@@ -110,8 +110,6 @@ mentorship_platform/
 
 to learn:
 
-signals,
-
 кастомные middleware,
 
 permissions & authentication,
