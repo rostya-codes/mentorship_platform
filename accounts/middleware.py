@@ -48,37 +48,15 @@ class BlockedUserMiddleware:
 
 
 class LogAllRequestsMiddleware:
-    """
-
-    В методе __call__ логируй нужную информацию
-    Обычно это:
-
-        метод (GET, POST и т.д.)
-        путь (request.path)
-        user (если аутентифицирован)
-        IP-адрес
-        возможно, user-agent
-        время запроса (timestamp)
-
-    Не забудь вызвать self.get_response(request)
-    После логирования запрос должен идти дальше.
-
-    Зарегистрируй middleware в settings.py
-    Добавь свой класс в список MIDDLEWARE.
-
-    В настройках Django определи логгер
-    В секции LOGGING настрой хендлер для записи в файл, укажи имя логгера, уровень и путь к файлу.
-
-    Перезапусти сервер и проверь файл логов
-    Убедись, что каждый запрос теперь попадает в файл.
-
-    """
 
     def __init__(self, get_response):
+        """
+        если есть другие middleware после твоего — они будут вызваны,
+        если твоё middleware последнее — будет вызван view-функция, которая и формирует ответ пользователю.
+        """
         self.get_response = get_response
 
     def __call__(self, request):
-        # Получаем данные для лога
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         method = request.method
         path = request.path
@@ -92,15 +70,18 @@ class LogAllRequestsMiddleware:
         )
         user_agent = request.META.get("HTTP_USER_AGENT", "-")
 
-        # Формируем строку лога
+        before = datetime.now()
+        # 1. ДО — код выполнится **до вью**
+        response = self.get_response(request)
+        # 2. ПОСЛЕ — код выполнится **после вью**
+        after = datetime.now()
+        response_time_ms = int((after - before).total_seconds() * 1000)
+
         log_line = (
-            f"{timestamp} | method={method} | path={path} | user={username} | ip={ip} | agent={user_agent}\n"
+            f"{timestamp} | method={method} | path={path} | user={username} | ip={ip} "
+            f"| agent={user_agent} | response_time={response_time_ms}ms\n"
         )
 
-        # Записываем в файл
         with open("request_logs.log", "a") as file:
             file.write(log_line)
-
-        # Передаём запрос дальше
-        response = self.get_response(request)
         return response
