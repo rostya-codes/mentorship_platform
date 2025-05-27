@@ -44,6 +44,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     'accounts.middleware.BlockedUserMiddleware',
+    'accounts.middleware.LogAllRequestsMiddleware',
 ]
 
 ROOT_URLCONF = 'mentorship_platform.urls'
