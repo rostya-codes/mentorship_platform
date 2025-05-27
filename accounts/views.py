@@ -11,6 +11,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 
 from api.serializer import MyTokenObtainPairSerializer
 from .forms import RegisterForm, UpdateUserForm
+from .tasks import register_email_confirm
 from .utils import decode_uid, encode_uid, generate_token, verify_token
 
 User = get_user_model()
@@ -41,10 +42,7 @@ class RegisterView(View):
             reverse('email-verification', kwargs={'uidb64': uid, 'token': token})
         )
 
-        subject = 'Confirm your email'
-        message = (f'Hi {user.username},\n\nPlease verify your account by clicking the link below:\n{verification_link}'
-                   f'\n\nThank you!')
-        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user.email])
+        register_email_confirm.delay(user_id=user.id, verification_link=verification_link)
         messages.success(request, 'Check your email inbox and approve your email.')
 
 
