@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib.auth import get_user_model, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.core.mail import send_mail
 from django.shortcuts import redirect, render
 from django.urls import reverse
@@ -44,6 +45,7 @@ class RegisterView(View):
         message = (f'Hi {user.username},\n\nPlease verify your account by clicking the link below:\n{verification_link}'
                    f'\n\nThank you!')
         send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user.email])
+        messages.success(request, 'Check your email inbox and approve your email.')
 
 
 class EmailVerificationView(View):
