@@ -4,6 +4,13 @@
 {% block content %}
 <h2>Reviews for {{ mentor.get_full_name }}</h2>
 
+<p class="card-text">
+    {% if slot.mentor.get_average_rating %}
+        ⭐ Average Rating:
+        {{ slot.mentor.get_average_rating }}/5
+    {% endif %}
+</p>
+
 {% if reviews %}
     {% for review in reviews %}
         <div class="card mb-3">
