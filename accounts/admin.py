@@ -22,7 +22,7 @@ class MyUserAdmin(UserAdmin):
         (_("Permissions"),
          {"fields": ("is_staff", "is_active", "is_mentor", "is_email_verified", "groups", "user_permissions")}),
         (_("Important dates"), {"fields": ("last_login",)}),
-        (_("Block details"), {"fields": ("blocked_until", "last_unblocked")})
+        (_("Block details"), {"fields": ("blocked_until", "last_unblocked", "last_active_time")})
     )
 
     add_fieldsets = (

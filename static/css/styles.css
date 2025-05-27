@@ -190,3 +190,25 @@ hr {
         View All Slots
     </a>
 </div>
+
+/* Сделать кнопки чуть крупнее и более контрастными на светлом фоне */
+.navbar .btn {
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    transition: background 0.2s, color 0.2s;
+}
+
+.navbar .btn:focus, .navbar .btn:hover {
+    opacity: 0.88;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+/* Для темной темы — пример */
+@media (prefers-color-scheme: dark) {
+    .navbar {
+        background: #222 !important;
+    }
+    .navbar .navbar-brand, .navbar .btn {
+        color: #fff !important;
+    }
+}

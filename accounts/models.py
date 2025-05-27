@@ -54,6 +54,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     blocked_until = models.DateTimeField(null=True, blank=True)
     last_unblocked = models.DateTimeField(null=True, blank=True)
 
+    last_active_time = models.DateTimeField(null=True, blank=True)
+
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email']
 

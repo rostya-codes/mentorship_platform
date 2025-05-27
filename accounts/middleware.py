@@ -7,11 +7,13 @@ Middleware — это класс (или функция), который обр�
     Выполнять "глобальные" проверки (например, аутентификацию, логирование, ограничение по времени и т.д.).
 """
 from datetime import datetime
+from http.client import responses
+
+from django.contrib.auth import get_user_model
 
 """
 Для чего ещё может пригодиться middleware?
 
-    Автоматическое обновление последнего времени активности пользователя
     Вставка заголовков или кук во все ответы
     Ограничение количества запросов (rate limiting)
     Глобальная обработка ошибок (например, кастомные 403/404/500 страницы)
@@ -22,6 +24,8 @@ import logging
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils import timezone
+
+User = get_user_model()
 
 
 class BlockedUserMiddleware:
@@ -83,4 +87,49 @@ class LogAllRequestsMiddleware:
 
         with open("request_logs.log", "a") as file:
             file.write(log_line)
+        return response
+
+
+class SaveLastActiveTimeMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request, *args, **kwargs):
+        response = self.get_response(request)
+        if hasattr(request, 'user') and request.user.is_authenticated:
+            # Обновляем поле last_active_time только для залогиненных пользователей
+            user = request.user
+            user.last_active_time = timezone.now()
+            user.save(update_fields=['last_active_time'])
+        return response
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class InsertHeadersOrCookiesMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+
+    def __call__(self, request, *args, **kwargs):
+        response = self.get_response(request)
+        response['X-My-Custom-Header'] = 'Value'
+        response.set_cookie('my_cookie', 'cookie_value')
         return response

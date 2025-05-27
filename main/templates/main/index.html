@@ -17,30 +17,24 @@
     {% for mentor in mentors %}
       <div class="col-md-4 mb-4">
         <div class="card shadow-sm border-light rounded h-100">
-          {% if mentor.photo %}
-            <img src="{{ mentor.photo.url }}" class="card-img-top rounded-top" alt="Mentor's photo">
+          {% if mentor.image %}
+            <img src="{{ mentor.image.url }}" class="card-img-top rounded-top" alt="Mentor's photo">
           {% else %}
-            <img src="{% static 'images/default_mentor.jpg' %}" class="card-img-top rounded-top" alt="Default Mentor Photo">
+            <img src="{% static 'images/default-mentor.png' %}" class="card-img-top rounded-top" alt="Default Mentor Photo">
           {% endif %}
           <div class="card-body">
             <h5 class="card-title text-dark">{{ mentor.username }}</h5>
             <p class="card-text text-muted">{{ mentor.bio|truncatewords:20 }}</p>
             <div class="d-flex justify-content-between">
-              {% if user.is_authenticated %}
-                <a href="{% url 'slot_list' %}" class="btn btn-success btn-sm shadow-sm">Book Consultation</a>
-              {% else %}
-                <a href="{% url 'login' %}" class="btn btn-outline-primary btn-sm shadow-sm">Login to Book</a>
-              {% endif %}
+                <a href="{% url 'mentor-profile' mentor.id %}" class="btn btn-success btn-sm shadow-sm">Mentor's profile</a>
             </div>
           </div>
         </div>
       </div>
     {% empty %}
-      <!--
       <div class="col-12 text-center">
         <p>No mentors available yet.</p>
       </div>
-      -->
     {% endfor %}
     </div>
 
