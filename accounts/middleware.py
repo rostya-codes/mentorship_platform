@@ -7,16 +7,25 @@ Middleware — это класс (или функция), который обр�
     Выполнять "глобальные" проверки (например, аутентификацию, логирование, ограничение по времени и т.д.).
 """
 from datetime import datetime
-from http.client import responses
 
+import redis
 from django.contrib.auth import get_user_model
+from django.http import JsonResponse
+from django.utils.deprecation import MiddlewareMixin
 
 """
 Для чего ещё может пригодиться middleware?
 
-    Вставка заголовков или кук во все ответы
     Ограничение количества запросов (rate limiting)
     Глобальная обработка ошибок (например, кастомные 403/404/500 страницы)
+
+"""
+
+"""
+
+    process_request(self, request) — вызывается до обработки view
+    process_view(self, request, view_func, view_args, view_kwargs) — вызывается перед вызовом view-функции
+    process_response(self, request, response) — вызывается после обработки view
 
 """
 import logging
@@ -104,25 +113,6 @@ class SaveLastActiveTimeMiddleware:
         return response
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 class InsertHeadersOrCookiesMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
@@ -133,3 +123,54 @@ class InsertHeadersOrCookiesMiddleware:
         response['X-My-Custom-Header'] = 'Value'
         response.set_cookie('my_cookie', 'cookie_value')
         return response
+
+
+class RequestsLimitMiddleware:
+    """
+    Middleware для ограничения количества запросов от одного клиента (по IP) за определённый интервал времени.
+    Использует Redis для хранения счётчиков.
+    """
+
+    LIMIT = 30
+    PERIOD = 60
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+        self.redis = redis.Redis(host='localhost', port=6379, db=0)
+
+    def __call__(self, request):
+        client_id = self.get_client_id(request)
+        redis_key = f'rl:{client_id}'
+
+        try:
+            # Если Redis недоступен — просто пропускаем (или можно вернуть ошибку)
+            current = self.redis.incr(redis_key)
+            if current == 1:
+                self.redis.expire(redis_key, self.PERIOD)
+        except redis.exceptions.ConnectionError:
+            # Если Redis недоступен — просто пропускаем (или можно вернуть ошибку)
+            return self.get_response(request)
+
+        if current > self.LIMIT:
+            # Лимит превышен — возвращаем ошибку 429
+            retry_after = self.redis.ttl(redis_key)
+            return JsonResponse(
+                {
+                    'error': 'Too Many Requests',
+                    'detail': f'Requests limit of {self.LIMIT} per {self.PERIOD} seconds exceeded.',
+                    'retry_after': retry_after,
+                },
+                status=429,
+                headers={'Retry-After': str(retry_after)}
+            )
+        # Если лимит не превышен — продолжаем обработку
+        return self.get_response(request)
+
+    def get_client_id(self, request):
+        # Пример: по IP-адресу (для продакшена учтите X-Forwarded-For)
+        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+        if x_forwarded_for:
+            ip = x_forwarded_for.split(',')[0]
+        else:
+            ip = request.META.get('REMOTE_ADDR')
+        return ip

@@ -1,214 +1,292 @@
-/* Загальні стилі */
+/* ====== Глобальные стили ====== */
 body {
-    font-family: 'Roboto', sans-serif;
-    background-color: #f8f9fa;  /* Легкий фоновий колір */
-    color: #343a40;  /* Темний текст для контрасту */
-    line-height: 1.6;
+    font-family: 'Roboto', Arial, sans-serif;
+    background-color: #f8f9fa;
+    color: #23272b;
+    line-height: 1.7;
     margin: 0;
     padding: 0;
 }
 
-/* Логотип та шапка */
+/* ====== Навигационная панель ====== */
 .navbar {
     padding: 1rem 2rem;
-    background-color: #ffffff;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    background: #fff;
+    box-shadow: 0 4px 18px rgba(44, 62, 80, 0.09);
+    border-bottom: 1px solid #e9ecef;
 }
 
 .navbar-brand {
-    font-weight: 600;
-    font-size: 1.8rem;
-    color: #007bff;
-}
-
-.navbar-nav .nav-link {
-    font-weight: 500;
-    color: #495057 !important;
-    font-size: 1rem;
-}
-
-.navbar-nav .nav-link:hover {
-    color: #007bff !important;
-}
-
-/* Hero Section */
-h1.display-4 {
-    font-size: 3rem;
-    color: #007bff;
     font-weight: 700;
-    margin-bottom: 20px;
-}
-
-p.lead {
-    font-size: 1.25rem;
-    color: #6c757d;
-}
-
-/* Картки менторів */
-.card {
-    border: 1px solid #dee2e6;
-    border-radius: 10px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    background-color: #fff;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-}
-
-.card-body {
-    padding: 20px;
-}
-
-.card-title {
-    font-weight: 600;
-    font-size: 1.25rem;
-    color: #333;
-    margin-bottom: 15px;
-}
-
-.card-text {
-    font-size: 0.9rem;
-    color: #6c757d;
-}
-
-/* Кнопки */
-.btn {
-    border-radius: 25px;
-    padding: 10px 20px;
-    font-size: 1rem;
-    transition: background-color 0.3s, transform 0.3s ease;
-}
-
-.btn:hover {
-    transform: translateY(-2px);
-}
-
-.btn-primary, .btn-success {
-    font-weight: 600;
-}
-
-.btn-outline-primary {
-    border-color: #007bff;
-    color: #007bff;
-}
-
-.btn-outline-primary:hover {
-    background-color: #007bff;
-    color: #fff;
-}
-
-/* Контейнер */
-.container {
-    padding-left: 30px;
-    padding-right: 30px;
-}
-
-/* Адаптивність */
-@media (max-width: 768px) {
-    .navbar {
-        padding: 1rem;
-    }
-
-    .container {
-        padding-left: 15px;
-        padding-right: 15px;
-    }
-
-    .text-center h1 {
-        font-size: 2.5rem;
-    }
-
-    .card {
-        margin-left: 0;
-    }
-}
-
-/* Лінки */
-a {
-    color: #007bff;
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-a:hover {
-    color: #0056b3;
-}
-
-/* Відступи для основних елементів */
-.mt-5 {
-    margin-top: 3rem;
-}
-
-.mb-5 {
-    margin-bottom: 3rem;
-}
-
-.text-center {
-    text-align: center;
-}
-
-hr {
-    border: 1px solid #ccc; /* Тонка лінія */
-    margin: 20px 0; /* Відступи зверху і знизу */
-}
-
-.alert {
-    font-size: 16px;
-    margin-top: 20px;
-}
-
-.alert-success {
-    background-color: #d4edda;
-    border-color: #c3e6cb;
-}
-
-.alert-danger {
-    background-color: #f8d7da;
-    border-color: #f5c6cb;
-}
-
-<style>
-    .btn-info {
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
-        transition: all 0.3s ease;
-    }
-    .btn-info:hover {
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 3px 6px rgba(0, 0, 0, 0.15);
-        transform: translateY(-2px);
-    }
-    .btn-info:active {
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.08);
-        transform: translateY(1px);
-    }
-</style>
-
-<div class="text-center mt-4">
-    <a href="{% url 'slots_list' %}" class="btn btn-info btn-lg shadow-sm btn-block">
-        View All Slots
-    </a>
-</div>
-
-/* Сделать кнопки чуть крупнее и более контрастными на светлом фоне */
-.navbar .btn {
-    font-weight: 500;
+    font-size: 1.75rem;
+    color: #0d6efd !important;
     letter-spacing: 0.5px;
-    transition: background 0.2s, color 0.2s;
+}
+
+.navbar .btn {
+    font-weight: 600;
+    border-radius: 25px;
+    font-size: 1.05rem;
+    padding: 0.55rem 1.4rem;
+    letter-spacing: 0.5px;
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+    margin-left: 0.3rem;
+    margin-right: 0.3rem;
 }
 
 .navbar .btn:focus, .navbar .btn:hover {
-    opacity: 0.88;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    opacity: 0.92;
+    box-shadow: 0 2px 8px rgba(13, 110, 253, 0.07);
 }
 
-/* Для темной темы — пример */
+.navbar-toggler {
+    border: none;
+}
+.navbar-toggler:focus {
+    box-shadow: none;
+}
+
+/* ====== Кнопки ====== */
+.btn-primary, .btn-success, .btn-danger, .btn-info, .btn-outline-primary, .btn-outline-secondary {
+    font-weight: 600;
+    border-radius: 25px;
+}
+
+.btn-outline-primary {
+    border-color: #0d6efd;
+    color: #0d6efd;
+    background: transparent;
+}
+.btn-outline-primary:hover {
+    background: #0d6efd;
+    color: #fff;
+    border-color: #0d6efd;
+}
+.btn-outline-secondary {
+    border-color: #6c757d;
+    color: #6c757d;
+    background: transparent;
+}
+.btn-outline-secondary:hover {
+    background: #6c757d;
+    color: #fff;
+}
+
+.btn-danger {
+    background: #dc3545;
+    border-color: #dc3545;
+}
+.btn-danger:hover {
+    background: #b02a37;
+    border-color: #b02a37;
+}
+.btn-success {
+    background: #198754;
+    border-color: #198754;
+}
+.btn-success:hover {
+    background: #146c43;
+    border-color: #146c43;
+}
+.btn-info {
+    background: #0dcaf0;
+    border-color: #0dcaf0;
+    color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.07);
+    transition: all 0.3s;
+}
+.btn-info:hover {
+    background: #31d2f2;
+    border-color: #31d2f2;
+    color: #fff;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.13), 0 3px 6px rgba(0, 0, 0, 0.10);
+    transform: translateY(-2px);
+}
+.btn-info:active {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.10), 0 2px 4px rgba(0, 0, 0, 0.08);
+    transform: translateY(1px);
+}
+.btn-lg {
+    font-size: 1.15rem;
+    padding: 0.7rem 2.2rem;
+}
+.btn-block {
+    display: block;
+    width: 100%;
+}
+
+/* ====== Контейнер ====== */
+.container {
+    padding-left: 24px;
+    padding-right: 24px;
+}
+
+/* ====== Hero Section ====== */
+h1.display-4 {
+    font-size: 2.7rem;
+    color: #0d6efd;
+    font-weight: 800;
+    margin-bottom: 18px;
+    letter-spacing: 0.5px;
+}
+
+p.lead {
+    font-size: 1.18rem;
+    color: #6c757d;
+}
+
+/* ====== Карточки менторов ====== */
+.card {
+    border: 1px solid #dee2e6;
+    border-radius: 16px;
+    transition: transform 0.25s cubic-bezier(.42,0,.58,1), box-shadow 0.28s cubic-bezier(.42,0,.58,1);
+    background: #fff;
+    box-shadow: 0 3px 14px rgba(44, 62, 80, 0.11);
+}
+.card:hover {
+    transform: translateY(-8px) scale(1.024);
+    box-shadow: 0 8px 28px rgba(44, 62, 80, 0.13);
+}
+.card-body {
+    padding: 1.5rem;
+}
+.card-title {
+    font-weight: 700;
+    font-size: 1.22rem;
+    color: #23272b;
+    margin-bottom: 13px;
+}
+.card-text {
+    font-size: 1rem;
+    color: #6c757d;
+}
+
+/* ====== Alerts ====== */
+.alert {
+    font-size: 1.05rem;
+    margin-top: 22px;
+    border-radius: 10px;
+}
+.alert-success {
+    background-color: #d1e7dd;
+    border-color: #badbcc;
+    color: #0f5132;
+}
+.alert-danger {
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    color: #842029;
+}
+
+/* ====== Линк ====== */
+a {
+    color: #0d6efd;
+    text-decoration: none;
+    transition: color 0.22s;
+}
+a:hover, a:focus {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+/* ====== Utility ====== */
+.mt-5 { margin-top: 3rem !important; }
+.mb-5 { margin-bottom: 3rem !important; }
+.text-center { text-align: center !important; }
+hr {
+    border: 0;
+    border-top: 1.5px solid #e3e3e3;
+    margin: 22px 0;
+}
+
+/* ====== View All Slots Button Section ====== */
+.text-center.mt-4 .btn-info {
+    font-size: 1.12rem;
+    padding: 0.85rem 2.3rem;
+}
+
+/* ====== Адаптивность ====== */
+@media (max-width: 992px) {
+    .navbar {
+        padding: 1rem;
+    }
+    .container {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+    h1.display-4 {
+        font-size: 2.1rem;
+    }
+    .card-body {
+        padding: 1.1rem;
+    }
+}
+@media (max-width: 768px) {
+    .navbar {
+        padding: 0.5rem 0.9rem;
+    }
+    .container {
+        padding-left: 7px;
+        padding-right: 7px;
+    }
+    h1.display-4 {
+        font-size: 1.5rem;
+    }
+}
+@media (max-width: 576px) {
+    .navbar {
+        padding: 0.5rem 0.35rem;
+    }
+    .container {
+        padding-left: 2px;
+        padding-right: 2px;
+    }
+    .card {
+        margin-left: 0;
+        margin-right: 0;
+    }
+}
+
+/* ====== Темная тема (если включена в браузере) ====== */
 @media (prefers-color-scheme: dark) {
+    body {
+        background: #181a1b;
+        color: #e3e6ea;
+    }
     .navbar {
         background: #222 !important;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+        border-bottom: 1.5px solid #23272b;
     }
     .navbar .navbar-brand, .navbar .btn {
-        color: #fff !important;
+        color: #e3e6ea !important;
+    }
+    .card {
+        background: #23272b;
+        border-color: #23272b;
+        color: #fafbfc;
+        box-shadow: 0 5px 22px rgba(20,22,25,0.14);
+    }
+    .card-title {
+        color: #e3e6ea;
+    }
+    .alert-success {
+        background-color: #294e34;
+        border-color: #1f3d28;
+        color: #d1e7dd;
+    }
+    .alert-danger {
+        background-color: #5a2531;
+        border-color: #842029;
+        color: #f8d7da;
+    }
+    a, .btn-link {
+        color: #6ea8fe;
+    }
+    a:hover, a:focus {
+        color: #b6d4fe;
+    }
+    hr {
+        border-top: 1.5px solid #343a40;
     }
 }

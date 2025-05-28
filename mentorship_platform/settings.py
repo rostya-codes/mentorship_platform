@@ -47,6 +47,7 @@ MIDDLEWARE = [
     'accounts.middleware.LogAllRequestsMiddleware',
     'accounts.middleware.SaveLastActiveTimeMiddleware',
     'accounts.middleware.InsertHeadersOrCookiesMiddleware',
+    'accounts.middleware.RequestsLimitMiddleware',
 ]
 
 ROOT_URLCONF = 'mentorship_platform.urls'

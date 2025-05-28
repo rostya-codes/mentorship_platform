@@ -9,18 +9,18 @@
         <div class="row">
             {% for slot in slots %}
                 <div class="col-md-4 mb-4">
-                    <div class="card">
+                    <div class="card h-100">
                         <div class="card-body">
 
-                            <div class="card mb-3 shadow-sm">
-                                <div class="row g-0">
-                                    <div class="col-md-2">
-                                        <img src="{{ mentor.photo.url }}" class="img-fluid rounded-start" alt="{{ mentor.get_full_name }}">
+                            <div class="card mb-3 shadow-sm border-0 bg-light">
+                                <div class="row g-0 align-items-center">
+                                    <div class="col-12 text-center mb-3">
+                                        <img src="{{ slot.mentor.image.url }}" class="img-fluid rounded-circle shadow" alt="{{ slot.mentor.get_full_name }}" style="width: 90px; height: 90px; object-fit: cover;">
                                     </div>
-                                    <div class="col-md-10">
-                                        <div class="card-body">
-                                            <h5 class="card-title">{{ slot.mentor.get_full_name }}</h5>
-                                            <p class="card-text">
+                                    <div class="col-12">
+                                        <div class="card-body p-0 text-center">
+                                            <h5 class="card-title mb-2">{{ slot.mentor.get_full_name }}</h5>
+                                            <p class="card-text mb-2">
                                                 ⭐ Average Rating:
                                                 {% if slot.mentor.get_average_rating %}
                                                     {{ slot.mentor.get_average_rating }}/5
@@ -28,7 +28,7 @@
                                                     No ratings yet
                                                 {% endif %}
                                             </p>
-                                            <a href="{% url 'mentor-profile' slot.mentor.id %}" class="btn btn-outline-primary">View Profile</a>
+                                            <a href="{% url 'mentor-profile' slot.mentor.id %}" class="btn btn-outline-primary btn-sm mb-2">View Profile</a>
                                         </div>
                                     </div>
                                 </div>
