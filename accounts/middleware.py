@@ -103,7 +103,7 @@ class SaveLastActiveTimeMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
 
-    def __call__(self, request, *args, **kwargs):
+    def __call__(self, request):
         response = self.get_response(request)
         if hasattr(request, 'user') and request.user.is_authenticated:
             # Обновляем поле last_active_time только для залогиненных пользователей
@@ -118,7 +118,7 @@ class InsertHeadersOrCookiesMiddleware:
         self.get_response = get_response
 
 
-    def __call__(self, request, *args, **kwargs):
+    def __call__(self, request):
         response = self.get_response(request)
         response['X-My-Custom-Header'] = 'Value'
         response.set_cookie('my_cookie', 'cookie_value')
