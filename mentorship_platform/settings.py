@@ -7,7 +7,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = SK
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -35,6 +35,8 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'accounts.middleware.CustomErrorPagesMiddleware',
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -70,7 +72,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'mentorship_platform.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
@@ -80,7 +81,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -116,8 +116,8 @@ REST_FRAMEWORK = {
         # 'rest_framework.throttling.ScopedRateThrottle',
     ],
     'DEFAULT_THROTTLE_RATES': {
-        'anon': '5/minute',   # 10 запросов в минуту для анонимов
-        'user': '10/minute',    # 100 запросов в час для залогиненного юзера
+        'anon': '5/minute',  # 10 запросов в минуту для анонимов
+        'user': '10/minute',  # 100 запросов в час для залогиненного юзера
         # 'mentors_reviews': '5/minute',
         # 'my_bookings': '10/minute'
     }
@@ -129,7 +129,6 @@ SIMPLE_JWT = {
     # ... другие настройки ...
 }
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
@@ -140,7 +139,6 @@ TIME_ZONE = 'Europe/Dublin'
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/

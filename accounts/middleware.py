@@ -7,16 +7,17 @@ Middleware — это класс (или функция), который обр�
     Выполнять "глобальные" проверки (например, аутентификацию, логирование, ограничение по времени и т.д.).
 """
 from datetime import datetime
+from http.client import responses
 
 import redis
 from django.contrib.auth import get_user_model
-from django.http import JsonResponse
+from django.core.exceptions import PermissionDenied
+from django.http import JsonResponse, Http404
 from django.utils.deprecation import MiddlewareMixin
 
 """
 Для чего ещё может пригодиться middleware?
 
-    Ограничение количества запросов (rate limiting)
     Глобальная обработка ошибок (например, кастомные 403/404/500 страницы)
 
 """
@@ -30,7 +31,7 @@ from django.utils.deprecation import MiddlewareMixin
 """
 import logging
 
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils import timezone
 
@@ -187,3 +188,19 @@ class RequestsLimitMiddleware:
             ip = request.META.get('REMOTE_ADDR')
             print(f"IP from REMOTE_ADDR: {ip}")
         return ip
+
+
+class CustomErrorPagesMiddleware:
+    def  __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        try:
+            response = self.get_response(request)
+        except Http404:
+            return render(request, '404.html', status=404)
+        except PermissionDenied:
+            return render(request, '403.html', status=403)
+        except Exception:
+            return render(request, '500.html', status=500)
+        return response
