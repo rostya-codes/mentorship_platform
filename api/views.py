@@ -4,11 +4,11 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
-from yaml import serialize
 
 from api.serializer import UserSerializer, ReviewSerializer, SlotSerializer, SlotBookSerializer, CreateReviewSerializer, \
-    MyTokenObtainPairSerializer, MentorsRatingSerializer
+    MyTokenObtainPairSerializer, MentorsRatingSerializer, UserProfileSerializer
 from reviews.models import Review
 from schedule.models import Slot
 
@@ -169,3 +169,25 @@ class AuthViewSet(viewsets.ViewSet):
             }
             return Response(data, status=status.HTTP_200_OK)
         return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+
+
+class ProfileAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(
+        responses={200: UserProfileSerializer()},
+    )
+    def get(self, request):
+        serializer = UserProfileSerializer(request.user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @swagger_auto_schema(
+        request_body=UserProfileSerializer(),
+        responses={200: UserProfileSerializer()},
+    )
+    def put(self, request):
+        serializer = UserProfileSerializer(request.user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

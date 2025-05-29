@@ -2,34 +2,47 @@
 
 {% block content %}
 <div class="container mt-5">
-    <h2>All Users</h2>
-    <table class="table table-bordered mt-4">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Username</th>
-                <th>Email</th>
-                <th>Is Active</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for user in users %}
-            <tr>
-                <td>{{ user.id }}</td>
-                <td>{{ user.username }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ user.is_active }}</td>
-                <td>
-                    {% if user.is_active %}
-                        <a href="{% url 'ban-user' user.id %}" class="btn btn-danger btn-sm">Ban</a>
-                    {% else %}
-                        <a href="{% url 'unban-user' user.id %}" class="btn btn-success btn-sm">Unban</a>
-                    {% endif %}
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <h2 class="mb-4 text-center text-light">All Users</h2>
+
+    <div class="table-responsive">
+        <table class="table table-bordered align-middle shadow-sm border rounded" style="background-color: #1e1e1e;">
+            <thead style="background-color: #343a40; color: #ffffff;">
+                <tr>
+                    <th>#ID</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th class="text-center">Status</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr style="color: #f1f1f1;">
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.email }}</td>
+                    <td class="text-center">
+                        {% if user.is_active %}
+                            <span class="badge bg-success">Active</span>
+                        {% else %}
+                            <span class="badge bg-danger">Banned</span>
+                        {% endif %}
+                    </td>
+                    <td class="text-center">
+                        {% if user.is_active %}
+                            <a href="{% url 'ban-user' user.id %}" class="btn btn-sm btn-outline-danger">Ban</a>
+                        {% else %}
+                            <a href="{% url 'unban-user' user.id %}" class="btn btn-sm btn-outline-success">Unban</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center text-muted">No users found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 {% endblock %}
