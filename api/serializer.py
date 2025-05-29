@@ -28,6 +28,12 @@ class SlotSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class CreateSlotSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Slot
+        fields = ['date', 'time', 'mentor']
+
+
 class SlotBookSerializer(serializers.Serializer):
     slot_id = serializers.IntegerField()
 

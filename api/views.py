@@ -6,9 +6,11 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
+from yaml import serialize
 
+from api.permissions import IsMentor
 from api.serializer import UserSerializer, ReviewSerializer, SlotSerializer, SlotBookSerializer, CreateReviewSerializer, \
-    MyTokenObtainPairSerializer, MentorsRatingSerializer, UserProfileSerializer
+    MyTokenObtainPairSerializer, MentorsRatingSerializer, UserProfileSerializer, CreateSlotSerializer
 from reviews.models import Review
 from schedule.models import Slot
 
@@ -190,4 +192,20 @@ class ProfileAPIView(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CreateSlotAPIView(APIView):
+    permission_classes = [IsMentor, IsAuthenticated]
+
+    @swagger_auto_schema(
+        request_body=CreateSlotSerializer(),
+        responses={200: CreateSlotSerializer()},
+        operation_summary='Create slot api view'
+    )
+    def post(self, request):
+        serializer = CreateSlotSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(mentor=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
