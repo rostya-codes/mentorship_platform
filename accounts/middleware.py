@@ -7,29 +7,11 @@ Middleware — это класс (или функция), который обр�
     Выполнять "глобальные" проверки (например, аутентификацию, логирование, ограничение по времени и т.д.).
 """
 from datetime import datetime
-from http.client import responses
 
 import redis
 from django.contrib.auth import get_user_model
 from django.core.exceptions import PermissionDenied
 from django.http import JsonResponse, Http404
-from django.utils.deprecation import MiddlewareMixin
-
-"""
-Для чего ещё может пригодиться middleware?
-
-    Глобальная обработка ошибок (например, кастомные 403/404/500 страницы)
-
-"""
-
-"""
-
-    process_request(self, request) — вызывается до обработки view
-    process_view(self, request, view_func, view_args, view_kwargs) — вызывается перед вызовом view-функции
-    process_response(self, request, response) — вызывается после обработки view
-
-"""
-import logging
 
 from django.shortcuts import redirect, render
 from django.urls import reverse

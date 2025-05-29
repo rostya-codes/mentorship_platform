@@ -110,8 +110,17 @@ mentorship_platform/
 
 to learn:
 
-кастомные middleware,
-
 permissions & authentication,
 
+    Показать, как реализовать JWT/Token аутентификацию?
+    Придумать custom permission под твой проект?
+    Разобрать, как твои permissions работают сейчас? (дай файл — разберём)
+    Показать, как ограничить доступ к view только для админов?
+    Сделать тест для permissions?
+
+
 DRF: ViewSet, Serializer, GenericAPIView, throttling, filtering, pagination.
+
+Базовая безопасность Django (CSRF, XSS, SQLi)
+
+Оптимизация запросов: select_related, prefetch_related
