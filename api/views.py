@@ -8,7 +8,7 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from yaml import serialize
 
-from api.permissions import IsMentor
+from api.permissions import IsMentor, IsSuperUser
 from api.serializer import UserSerializer, ReviewSerializer, SlotSerializer, SlotBookSerializer, CreateReviewSerializer, \
     MyTokenObtainPairSerializer, MentorsRatingSerializer, UserProfileSerializer, CreateSlotSerializer
 from reviews.models import Review
@@ -209,3 +209,22 @@ class CreateSlotAPIView(APIView):
             serializer.save(mentor=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UsersStatsAPIView(APIView):
+    permission_classes = [IsSuperUser]
+
+    @swagger_auto_schema(operation_summary='User stats api view only for superusers')
+    def get(self, request):
+        total_users = User.objects.all().count()
+        active_users = User.objects.filter(is_active=True).count()
+        staff_users = User.objects.filter(is_staff=True).count()
+        superusers = User.objects.filter(is_superuser=True).count()
+
+        data = {
+            "total_users": total_users,
+            "active_users": active_users,
+            "staff_users": staff_users,
+            "superusers": superusers
+        }
+        return Response(data)

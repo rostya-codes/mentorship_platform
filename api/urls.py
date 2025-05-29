@@ -19,4 +19,5 @@ urlpatterns = [
     path('token/refresh/', TokenRefreshView.as_view(), name='token-refresh'),
     path('profile/', views.ProfileAPIView.as_view(), name='profile-api-view'),
     path('create-slot/', views.CreateSlotAPIView.as_view(), name='create-slot-api-view'),
+    path('users-stats/', views.UsersStatsAPIView.as_view(), name='users-stats-api-view')
 ]
