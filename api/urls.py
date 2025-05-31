@@ -21,5 +21,6 @@ urlpatterns = [
     path('create-slot/', views.CreateSlotAPIView.as_view(), name='create-slot-api-view'),
     path('users-stats/', views.UsersStatsAPIView.as_view(), name='users-stats-api-view'),
     path('user-block-unblock/', views.UserBlockUnblockAPIView.as_view(), name='user-block-unblock-api-view'),
-    path('logs', views.LogsAPIView.as_view(), name='logs-api-view')
+    path('logs', views.LogsAPIView.as_view(), name='logs-api-view'),
+    path('user-export-csv/', views.UserExportCSVAPIView.as_view(), name='user-export-csv-api-view'),
 ]

@@ -1,6 +1,8 @@
 from datetime import datetime, timedelta
+import csv
 
 from django.contrib.auth import get_user_model, authenticate
+from django.http import HttpResponse
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
@@ -274,3 +276,42 @@ class LogsAPIView(APIView):
         with open('request_logs.log', 'r', encoding='utf-8') as file:
             text = file.read()
         return Response({'text': text})
+
+
+class UserExportCSVAPIView(APIView):
+    permission_classes = [IsAdminUser]
+
+    def get(self, request):
+        users = User.objects.all()
+
+        # Создаём HTTP-ответ с правильными заголовками
+        response = HttpResponse(content_type='text/csv; charset=utf-8')
+        response['Content-Disposition'] = 'attachment; filename="users_export.csv"'
+
+        writer = csv.writer(response)
+        header = ['id', 'username', 'email',
+                  'first_name', 'last_name', 'is_active',
+                  'is_email_verified', 'phone_number', 'image',
+                  'is_mentor', 'is_staff', 'blocked_until',
+                  'last_unblocked', 'last_active_time']
+
+        writer.writerow(header)
+
+        for user in users:
+            writer.writerow([
+                user.id,
+                user.username,
+                user.email,
+                user.first_name,
+                user.last_name,
+                user.is_active,
+                user.is_email_verified,
+                user.phone_number,
+                user.image,
+                user.is_mentor,
+                user.is_staff,
+                user.blocked_until,
+                user.last_unblocked,
+                user.last_active_time
+            ])
+        return response

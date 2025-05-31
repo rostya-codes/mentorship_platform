@@ -628,3 +628,11 @@ Time: 2025-05-27 17:14:35.237799+00:002025-05-27 18:15:59.237467 | GET | /accoun
 2025-05-31 16:14:22 | method=GET | path=/swagger/ | user=rostya | ip=127.0.0.1 | agent=Mozilla/5.0 (X11; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0 | response_time=71ms
 2025-05-31 16:14:55 | method=GET | path=/swagger/ | user=rostya | ip=127.0.0.1 | agent=Mozilla/5.0 (X11; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0 | response_time=22ms
 2025-05-31 16:14:55 | method=GET | path=/swagger/ | user=rostya | ip=127.0.0.1 | agent=Mozilla/5.0 (X11; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0 | response_time=39ms
+2025-05-31 17:23:43 | method=GET | path=/swagger/ | user=rostya | ip=127.0.0.1 | agent=Mozilla/5.0 (X11; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0 | response_time=100ms
+2025-05-31 17:23:43 | method=GET | path=/swagger/ | user=rostya | ip=127.0.0.1 | agent=Mozilla/5.0 (X11; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0 | response_time=74ms
+2025-05-31 17:25:12 | method=GET | path=/swagger/ | user=rostya | ip=127.0.0.1 | agent=Mozilla/5.0 (X11; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0 | response_time=102ms
+2025-05-31 17:25:12 | method=GET | path=/swagger/ | user=rostya | ip=127.0.0.1 | agent=Mozilla/5.0 (X11; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0 | response_time=69ms
+2025-05-31 17:25:21 | method=GET | path=/api/user-export-csv/ | user=rostya | ip=127.0.0.1 | agent=Mozilla/5.0 (X11; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0 | response_time=113ms
+2025-05-31 17:25:43 | method=GET | path=/swagger/ | user=rostya | ip=127.0.0.1 | agent=Mozilla/5.0 (X11; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0 | response_time=22ms
+2025-05-31 17:25:43 | method=GET | path=/swagger/ | user=rostya | ip=127.0.0.1 | agent=Mozilla/5.0 (X11; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0 | response_time=47ms
+2025-05-31 17:25:50 | method=GET | path=/api/user-export-csv/ | user=rostya | ip=127.0.0.1 | agent=Mozilla/5.0 (X11; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0 | response_time=18ms
