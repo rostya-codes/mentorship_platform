@@ -23,4 +23,5 @@ urlpatterns = [
     path('user-block-unblock/', views.UserBlockUnblockAPIView.as_view(), name='user-block-unblock-api-view'),
     path('logs', views.LogsAPIView.as_view(), name='logs-api-view'),
     path('user-export-csv/', views.UserExportCSVAPIView.as_view(), name='user-export-csv-api-view'),
+    path('reset-password/', views.ResetPasswordAPIView.as_view(), name='reset-password-api-view')
 ]

@@ -1,3 +1,4 @@
+import secrets
 from datetime import datetime, timedelta
 import csv
 
@@ -16,6 +17,7 @@ from api.serializers import UserSerializer, ReviewSerializer, SlotSerializer, Sl
     CreateReviewSerializer, \
     MyTokenObtainPairSerializer, MentorsRatingSerializer, UserProfileSerializer, CreateSlotSerializer, \
     UserBlockUnblockSerializer
+from api.tasks import send_password_reset
 from reviews.models import Review
 from schedule.models import Slot
 
@@ -315,3 +317,30 @@ class UserExportCSVAPIView(APIView):
                 user.last_active_time
             ])
         return response
+
+
+class ResetPasswordAPIView(APIView):
+    def post(self, request):
+        user_id = request.user.id
+        if not user_id:
+            return Response({'error': 'Missing user id.'}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            user = User.objects.get(pk=user_id)
+        except User.DoesNotExist:
+            return Response({'error': 'User not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+        # Генерируем временный пароль (например, 12 символов)
+        temp_password = secrets.token_urlsafe(9)
+
+        # Сброс пароля
+        user.set_password(temp_password)
+        user.save()
+
+        send_password_reset.delay(user_email=user.email, temp_password=temp_password)
+
+        return Response({
+            'message': 'Password has been reset.',
+            'temporary_password': temp_password,
+            'user_id': user.id,
+        }, status=status.HTTP_200_OK)
+
