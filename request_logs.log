@@ -615,3 +615,16 @@ Time: 2025-05-27 17:14:35.237799+00:002025-05-27 18:15:59.237467 | GET | /accoun
 2025-05-31 15:57:47 | method=POST | path=/api/user-block-unblock/ | user=rostya | ip=127.0.0.1 | agent=Mozilla/5.0 (X11; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0 | response_time=18ms
 2025-05-31 15:58:17 | method=GET | path=/swagger/ | user=rostya | ip=127.0.0.1 | agent=Mozilla/5.0 (X11; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0 | response_time=90ms
 2025-05-31 15:58:17 | method=GET | path=/swagger/ | user=rostya | ip=127.0.0.1 | agent=Mozilla/5.0 (X11; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0 | response_time=69ms
+2025-05-31 16:11:03 | method=GET | path=/swagger/ | user=rostya | ip=127.0.0.1 | agent=Mozilla/5.0 (X11; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0 | response_time=31ms
+2025-05-31 16:11:03 | method=GET | path=/swagger/ | user=rostya | ip=127.0.0.1 | agent=Mozilla/5.0 (X11; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0 | response_time=74ms
+2025-05-31 16:11:15 | method=GET | path=/api/logs | user=rostya | ip=127.0.0.1 | agent=Mozilla/5.0 (X11; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0 | response_time=89ms
+2025-05-31 16:11:46 | method=GET | path=/swagger/ | user=rostya | ip=127.0.0.1 | agent=Mozilla/5.0 (X11; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0 | response_time=21ms
+2025-05-31 16:11:46 | method=GET | path=/swagger/ | user=rostya | ip=127.0.0.1 | agent=Mozilla/5.0 (X11; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0 | response_time=66ms
+2025-05-31 16:13:36 | method=GET | path=/swagger/ | user=rostya | ip=127.0.0.1 | agent=Mozilla/5.0 (X11; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0 | response_time=21ms
+2025-05-31 16:13:36 | method=GET | path=/swagger/ | user=rostya | ip=127.0.0.1 | agent=Mozilla/5.0 (X11; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0 | response_time=39ms
+2025-05-31 16:13:58 | method=GET | path=/swagger/ | user=rostya | ip=127.0.0.1 | agent=Mozilla/5.0 (X11; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0 | response_time=21ms
+2025-05-31 16:13:58 | method=GET | path=/swagger/ | user=rostya | ip=127.0.0.1 | agent=Mozilla/5.0 (X11; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0 | response_time=41ms
+2025-05-31 16:14:22 | method=GET | path=/swagger/ | user=rostya | ip=127.0.0.1 | agent=Mozilla/5.0 (X11; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0 | response_time=27ms
+2025-05-31 16:14:22 | method=GET | path=/swagger/ | user=rostya | ip=127.0.0.1 | agent=Mozilla/5.0 (X11; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0 | response_time=71ms
+2025-05-31 16:14:55 | method=GET | path=/swagger/ | user=rostya | ip=127.0.0.1 | agent=Mozilla/5.0 (X11; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0 | response_time=22ms
+2025-05-31 16:14:55 | method=GET | path=/swagger/ | user=rostya | ip=127.0.0.1 | agent=Mozilla/5.0 (X11; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0 | response_time=39ms

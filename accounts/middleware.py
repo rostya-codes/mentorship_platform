@@ -132,6 +132,7 @@ class RequestsLimitMiddleware:
         try:
             # Increase the request counter for this client in Redis
             current = self.redis.incr(redis_key)
+            print(f'Limit of requests: {self.LIMIT} per {self.PERIOD} seconds.')
             print(f"Current number of requests for this client: {current}")
             # If this is the first request, set the expiration time for the key
             if current == 1:

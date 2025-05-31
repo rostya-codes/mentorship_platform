@@ -23,6 +23,10 @@ class UserBlockUnblockSerializer(serializers.Serializer):
     last_unblocked = serializers.DateTimeField(read_only=True)
 
 
+class LogsSerializer(serializers.Serializer):
+    text = serializers.CharField(read_only=True)
+
+
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User

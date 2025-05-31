@@ -230,7 +230,7 @@ class UsersStatsAPIView(APIView):
             "staff_users": staff_users,
             "superusers": superusers
         }
-        return Response(data)
+        return Response(data, status=status.HTTP_200_OK)
 
 
 class UserBlockUnblockAPIView(APIView):
@@ -261,3 +261,16 @@ class UserBlockUnblockAPIView(APIView):
             user.save()
             return Response(UserBlockUnblockSerializer(user).data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class LogsAPIView(APIView):
+
+    permission_classes = [IsSuperUser]
+
+    @swagger_auto_schema(
+        operation_summary='Get logs'
+    )
+    def get(self, request):
+        with open('request_logs.log', 'r', encoding='utf-8') as file:
+            text = file.read()
+        return Response({'text': text})

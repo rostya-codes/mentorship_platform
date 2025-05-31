@@ -20,5 +20,6 @@ urlpatterns = [
     path('profile/', views.ProfileAPIView.as_view(), name='profile-api-view'),
     path('create-slot/', views.CreateSlotAPIView.as_view(), name='create-slot-api-view'),
     path('users-stats/', views.UsersStatsAPIView.as_view(), name='users-stats-api-view'),
-    path('user-block-unblock/', views.UserBlockUnblockAPIView.as_view(), name='user-block-unblock-api-view')
+    path('user-block-unblock/', views.UserBlockUnblockAPIView.as_view(), name='user-block-unblock-api-view'),
+    path('logs', views.LogsAPIView.as_view(), name='logs-api-view')
 ]
