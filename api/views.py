@@ -1,15 +1,19 @@
+from datetime import datetime, timedelta
+
 from django.contrib.auth import get_user_model, authenticate
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from api.permissions import IsMentor, IsSuperUser
-from api.serializer import UserSerializer, ReviewSerializer, SlotSerializer, SlotBookSerializer, CreateReviewSerializer, \
-    MyTokenObtainPairSerializer, MentorsRatingSerializer, UserProfileSerializer, CreateSlotSerializer
+from api.serializers import UserSerializer, ReviewSerializer, SlotSerializer, SlotBookSerializer, \
+    CreateReviewSerializer, \
+    MyTokenObtainPairSerializer, MentorsRatingSerializer, UserProfileSerializer, CreateSlotSerializer, \
+    UserBlockUnblockSerializer
 from reviews.models import Review
 from schedule.models import Slot
 
@@ -227,3 +231,33 @@ class UsersStatsAPIView(APIView):
             "superusers": superusers
         }
         return Response(data)
+
+
+class UserBlockUnblockAPIView(APIView):
+    permission_classes = [IsAdminUser]
+
+    @swagger_auto_schema(
+        request_body=UserBlockUnblockSerializer(),
+        responses={200: UserBlockUnblockSerializer()},
+        operation_summary='Block or unblock user using id',
+    )
+    def post(self, request):
+        serializer = UserBlockUnblockSerializer(data=request.data)
+        if serializer.is_valid():
+            user_id = serializer.validated_data['id']
+            block = serializer.validated_data['block']
+            try:
+                user = User.objects.get(pk=user_id)
+            except User.DoesNotExist:
+                return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+            if block:
+                user.is_active = False
+                user.blocked_until = datetime.now() + timedelta(days=7)
+                user.last_unblocked = None
+            else:
+                user.is_active = True
+                user.last_unblocked = datetime.now()
+                user.blocked_until = None
+            user.save()
+            return Response(UserBlockUnblockSerializer(user).data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

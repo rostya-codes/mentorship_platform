@@ -15,6 +15,14 @@ class UserSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class UserBlockUnblockSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    block = serializers.BooleanField(default=False)
+    is_active = serializers.BooleanField(read_only=True)
+    blocked_until = serializers.DateTimeField(read_only=True)
+    last_unblocked = serializers.DateTimeField(read_only=True)
+
+
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
