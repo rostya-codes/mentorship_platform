@@ -2,10 +2,11 @@ from calendar import month
 from datetime import datetime, timedelta
 
 from django.contrib.auth import get_user_model
-from django.utils import timezone
-from django.db.models.signals import post_save, post_delete
+from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
-from .models import Slot, BookingLog
+from django.utils import timezone
+
+from .models import BookingLog, Slot
 from .tasks import remind_send_email_booking
 
 CANCEL_LIMIT_PER_WEEK = 3

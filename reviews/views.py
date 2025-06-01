@@ -1,7 +1,7 @@
-from django.contrib.auth import get_user_model
-from django.shortcuts import render, redirect, get_object_or_404
-from django.views import View
 from django.contrib import messages
+from django.contrib.auth import get_user_model
+from django.shortcuts import get_object_or_404, redirect, render
+from django.views import View
 
 from reviews.forms import LeaveReviewForm, UpdateReviewForm
 from reviews.models import Review

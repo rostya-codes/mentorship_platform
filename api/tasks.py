@@ -3,6 +3,7 @@ from django.core.mail import send_mail
 
 from celery import shared_task
 
+
 @shared_task
 def send_password_reset(user_email, temp_password):
     subject = 'Password reset'

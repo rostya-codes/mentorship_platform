@@ -1,14 +1,15 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import Http404
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect, render
+from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import ListView
-from django.utils import timezone
+
+from schedule.models import Slot
 
 from .forms import CreateSlotForm, UpdateSlotForm
-from schedule.models import Slot
 
 User = get_user_model()
 

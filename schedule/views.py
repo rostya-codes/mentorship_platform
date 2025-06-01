@@ -3,14 +3,14 @@ from datetime import datetime
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
 from django.shortcuts import redirect, render
-from django.views import View
 from django.utils import timezone
+from django.utils.decorators import method_decorator
+from django.views import View
 
 from mentorship_platform.tasks import send_booking_confirmation_email
 from reviews.models import Review
-from schedule.models import Slot, BookingLog
+from schedule.models import BookingLog, Slot
 
 User = get_user_model()
 

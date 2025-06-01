@@ -1,22 +1,31 @@
+import csv
 import secrets
 from datetime import datetime, timedelta
-import csv
 
-from django.contrib.auth import get_user_model, authenticate
+from django.contrib.auth import authenticate, get_user_model
 from django.http import HttpResponse
+
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework import viewsets, status
+from rest_framework import status, viewsets
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from api.permissions import IsMentor, IsSuperUser
-from api.serializers import UserSerializer, ReviewSerializer, SlotSerializer, SlotBookSerializer, \
-    CreateReviewSerializer, \
-    MyTokenObtainPairSerializer, MentorsRatingSerializer, UserProfileSerializer, CreateSlotSerializer, \
-    UserBlockUnblockSerializer
+from api.serializers import (
+    CreateReviewSerializer,
+    CreateSlotSerializer,
+    MentorsRatingSerializer,
+    MyTokenObtainPairSerializer,
+    ReviewSerializer,
+    SlotBookSerializer,
+    SlotSerializer,
+    UserBlockUnblockSerializer,
+    UserProfileSerializer,
+    UserSerializer,
+)
 from api.tasks import send_password_reset
 from reviews.models import Review
 from schedule.models import Slot
