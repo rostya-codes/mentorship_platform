@@ -110,13 +110,5 @@ mentorship_platform/
 
 to learn:
 
-permissions & authentication,
+validation
 
-    Сделать тест для permissions?
-
-
-DRF: ViewSet, Serializer, GenericAPIView, throttling, filtering, pagination.
-
-Базовая безопасность Django (CSRF, XSS, SQLi)
-
-Оптимизация запросов: select_related, prefetch_related

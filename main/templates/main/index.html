@@ -6,7 +6,7 @@
   <!-- Hero Section -->
   <div class="text-center mb-5">
     <h1 class="display-4 font-weight-bold text-primary">Mentorship Platform</h1>
-    <p class="lead text-muted">Find a mentor, book consultations, and grow with professionals.</p>
+    <p class="lead text-white">Find a mentor, book consultations, and grow with professionals.</p>
     {% if not user.is_authenticated %}
       <a href="{% url 'register' %}" class="btn btn-primary btn-lg shadow-sm">Register Now</a>
     {% endif %}
@@ -23,8 +23,8 @@
             <img src="{% static 'images/default-mentor.png' %}" class="card-img-top rounded-top" alt="Default Mentor Photo">
           {% endif %}
           <div class="card-body">
-            <h5 class="card-title text-dark">{{ mentor.username }}</h5>
-            <p class="card-text text-muted">{{ mentor.bio|truncatewords:20 }}</p>
+            <h5 class="card-title text-dark text-white">{{ mentor.username }}</h5>
+            <p class="card-text text-white">{{ mentor.bio|truncatewords:20 }}</p>
             <div class="d-flex justify-content-between">
                 <a href="{% url 'mentor-profile' mentor.id %}" class="btn btn-success btn-sm shadow-sm">Mentor's profile</a>
             </div>
