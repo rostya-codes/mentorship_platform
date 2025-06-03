@@ -8,3 +8,7 @@ class ReviewAlreadyExists(Exception):
 
 class NotYourSlot(Exception):
     pass
+
+
+class CannotLeaveBefore(Exception):
+    pass

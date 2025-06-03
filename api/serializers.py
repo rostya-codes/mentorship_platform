@@ -1,3 +1,6 @@
+from datetime import datetime
+from django.utils import timezone
+
 from django.contrib.auth import get_user_model
 
 from rest_framework import serializers
@@ -6,7 +9,7 @@ from rest_framework_simplejwt.tokens import Token
 
 from reviews.models import Review
 from schedule.models import Slot
-from .exceptions import SlotDoesNotExist, ReviewAlreadyExists, NotYourSlot
+from .exceptions import SlotDoesNotExist, ReviewAlreadyExists, NotYourSlot, CannotLeaveBefore
 
 User = get_user_model()
 
@@ -77,6 +80,13 @@ class CreateReviewSerializer(serializers.ModelSerializer):
         # проверяем, что пользователь — участник слота
         if user != slot.user:  # and user != slot.mentor
             raise NotYourSlot('You can only leave a review for a slot you participated in.')
+
+        now = timezone.now()
+        event_datetime = datetime.combine(slot.date, slot.time)
+        if timezone.is_aware(now):
+            event_datetime = timezone.make_aware(event_datetime, timezone.get_current_timezone())
+        if event_datetime > now:
+            raise CannotLeaveBefore('You cannot leave a review before the slot has ended.')
 
         return attrs
 
