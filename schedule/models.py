@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils.html import format_html
 
 
 class Slot(models.Model):
@@ -20,6 +21,14 @@ class Slot(models.Model):
 
     def __str__(self):
         return f"{self.pk} {self.mentor.username} - {self.date} {self.time} ({'Booked' if self.is_booked else 'Free'})"
+
+    def get_review_link(self):
+        if hasattr(self, 'review_slot') and self.review_slot:
+            return format_html(
+            '<a href="/admin/reviews/review/{}/change/">Open review</a>', self.review_slot.id
+        )
+        return 'None'
+    get_review_link.short_description = 'Review'
 
     def clean(self):
         if self.is_booked and not self.user or not self.is_booked and self.user:
