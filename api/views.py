@@ -6,7 +6,7 @@ from django.contrib.auth import authenticate, get_user_model
 from django.http import HttpResponse
 
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework import status, viewsets
+from rest_framework import status, viewsets, serializers
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
@@ -25,6 +25,7 @@ from api.serializers import (
     UserProfileSerializer,
     UserSerializer,
 )
+from .exceptions import SlotDoesNotExist, ReviewAlreadyExists, NotYourSlot
 from api.tasks import send_password_reset
 from reviews.models import Review
 from schedule.models import Slot
@@ -140,15 +141,19 @@ class SlotViewSet(viewsets.ModelViewSet):
         user = request.user
         slot = self.get_object()
 
-        if not Review.objects.filter(user=user, slot=slot).exists():
-
-            serializer = CreateReviewSerializer(data=request.data, context={'request': request, 'slot': slot})
-            if serializer.is_valid():
-                serializer.save(mentor=slot.mentor, user=user, slot=slot)
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-            return Response({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
-        return Response({'error': 'Review already exists.'}, status=status.HTTP_400_BAD_REQUEST)
-
+        serializer = CreateReviewSerializer(data=request.data, context={'request': request, 'slot': slot})
+        try:
+            serializer.is_valid(raise_exception=True)
+            serializer.save(mentor=slot.mentor, slot=slot, user=user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        except SlotDoesNotExist as exc:
+            return Response({'error': str(exc)}, status=status.HTTP_404_NOT_FOUND)
+        except ReviewAlreadyExists as exc:
+            return Response({'error': str(exc)}, status=status.HTTP_409_CONFLICT)
+        except NotYourSlot as exc:
+            return Response({'error': str(exc)}, status=status.HTTP_403_FORBIDDEN)
+        except serializers.ValidationError as exc:
+            return Response({'error': exc.detail}, status=status.HTTP_400_BAD_REQUEST)
     @swagger_auto_schema(
         method='get',
         responses={200: SlotSerializer(many=True)},

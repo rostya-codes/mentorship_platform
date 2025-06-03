@@ -6,6 +6,7 @@ from rest_framework_simplejwt.tokens import Token
 
 from reviews.models import Review
 from schedule.models import Slot
+from .exceptions import SlotDoesNotExist, ReviewAlreadyExists, NotYourSlot
 
 User = get_user_model()
 
@@ -68,11 +69,14 @@ class CreateReviewSerializer(serializers.ModelSerializer):
         user = self.context['request'].user
 
         if not slot:
-            raise serializers.ValidationError('Slot not provided to serializer context.')
+            raise SlotDoesNotExist('Slot not provided to serializer context.')
+
+        if Review.objects.filter(slot=slot, user=user).exists():
+            raise ReviewAlreadyExists('Review already exists.')
 
         # проверяем, что пользователь — участник слота
         if user != slot.user:  # and user != slot.mentor
-            raise serializers.ValidationError('You can only leave a review for a slot you participated in.')
+            raise NotYourSlot('You can only leave a review for a slot you participated in.')
 
         return attrs
 
