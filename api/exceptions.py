@@ -12,3 +12,7 @@ class NotYourSlot(Exception):
 
 class CannotLeaveBefore(Exception):
     pass
+
+
+class TooSmallStars(Exception):
+    pass

@@ -38,7 +38,7 @@ class Review(models.Model):
             raise ValidationError('Rating must be 0 - 5')
 
         if self.rating <= 2 and len(self.comment) < 15:
-            raise ValidationError('Your rating is too small you you must writ a comment (min 15 symbols)')
+            raise ValidationError('Your rating is too small, you must write a comment (min 15 symbols)')
 
         review = Review.objects.filter(user=self.user, slot=self.slot).exclude(pk=self.pk)
         if review.exists():

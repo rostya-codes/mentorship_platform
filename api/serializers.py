@@ -9,7 +9,7 @@ from rest_framework_simplejwt.tokens import Token
 
 from reviews.models import Review
 from schedule.models import Slot
-from .exceptions import SlotDoesNotExist, ReviewAlreadyExists, NotYourSlot, CannotLeaveBefore
+from .exceptions import SlotDoesNotExist, ReviewAlreadyExists, NotYourSlot, CannotLeaveBefore, TooSmallStars
 
 User = get_user_model()
 
@@ -70,6 +70,8 @@ class CreateReviewSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         slot = self.context.get('slot')
         user = self.context['request'].user
+        rating = attrs.get('rating')
+        comment = attrs.get('comment')
 
         if not slot:
             raise SlotDoesNotExist('Slot not provided to serializer context.')
@@ -87,6 +89,9 @@ class CreateReviewSerializer(serializers.ModelSerializer):
             event_datetime = timezone.make_aware(event_datetime, timezone.get_current_timezone())
         if event_datetime > now:
             raise CannotLeaveBefore('You cannot leave a review before the slot has ended.')
+
+        if rating <= 2 and len(comment) < 15:
+            raise TooSmallStars('If you give 2 or less stars, you should write why (min 15 symbols).')
 
         return attrs
 
