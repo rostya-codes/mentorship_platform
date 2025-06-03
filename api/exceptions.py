@@ -16,3 +16,7 @@ class CannotLeaveBefore(Exception):
 
 class TooSmallStars(Exception):
     pass
+
+
+class TooBigComment(Exception):
+    pass

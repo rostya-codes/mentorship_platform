@@ -25,7 +25,8 @@ from api.serializers import (
     UserProfileSerializer,
     UserSerializer,
 )
-from .exceptions import SlotDoesNotExist, ReviewAlreadyExists, NotYourSlot, CannotLeaveBefore, TooSmallStars
+from .exceptions import SlotDoesNotExist, ReviewAlreadyExists, NotYourSlot, CannotLeaveBefore, TooSmallStars, \
+    TooBigComment
 from api.tasks import send_password_reset
 from reviews.models import Review
 from schedule.models import Slot
@@ -155,6 +156,8 @@ class SlotViewSet(viewsets.ModelViewSet):
         except CannotLeaveBefore as exc:
             return Response({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
         except TooSmallStars as exc:
+            return Response({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
+        except TooBigComment as exc:
             return Response({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
         except serializers.ValidationError as exc:
             return Response({'error': exc.detail}, status=status.HTTP_400_BAD_REQUEST)

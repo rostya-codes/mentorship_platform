@@ -9,7 +9,8 @@ from rest_framework_simplejwt.tokens import Token
 
 from reviews.models import Review
 from schedule.models import Slot
-from .exceptions import SlotDoesNotExist, ReviewAlreadyExists, NotYourSlot, CannotLeaveBefore, TooSmallStars
+from .exceptions import SlotDoesNotExist, ReviewAlreadyExists, NotYourSlot, CannotLeaveBefore, TooSmallStars, \
+    TooBigComment
 
 User = get_user_model()
 
@@ -92,6 +93,9 @@ class CreateReviewSerializer(serializers.ModelSerializer):
 
         if rating <= 2 and len(comment) < 15:
             raise TooSmallStars('If you give 2 or less stars, you should write why (min 15 symbols).')
+
+        if len(comment) >= 1000:
+            raise TooBigComment('Comment must contains max 1000 symbols.')
 
         return attrs
 
