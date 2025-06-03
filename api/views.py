@@ -18,7 +18,6 @@ from api.serializers import (
     CreateReviewSerializer,
     CreateSlotSerializer,
     MentorsRatingSerializer,
-    MyTokenObtainPairSerializer,
     ReviewSerializer,
     SlotBookSerializer,
     SlotSerializer,
@@ -133,25 +132,22 @@ class SlotViewSet(viewsets.ModelViewSet):
     @swagger_auto_schema(
         method='post',
         request_body=CreateReviewSerializer,
-        responses={201: CreateReviewSerializer(),}
+        responses={201: CreateReviewSerializer()},
+        operation_summary='Leave review for booked and ended slot.'
     )
     @action(detail=True, methods=['post'], url_path='review')
     def leave_review(self, request, pk=None):
         user = request.user
         slot = self.get_object()
 
-        if slot.user == user:
-            if slot.is_booked:
-                if not Review.objects.filter(user=user, slot=slot).exists():
+        if not Review.objects.filter(user=user, slot=slot).exists():
 
-                    serializer = CreateReviewSerializer(data=request.data)
-                    if serializer.is_valid():
-                        serializer.save(mentor=slot.mentor, user=user, slot=slot)
-                        return Response(serializer.data, status=status.HTTP_201_CREATED)
-                    return Response({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
-                return Response({'error': 'Review already exists.'}, status=status.HTTP_400_BAD_REQUEST)
-            return Response({'error': 'Slot is not booked.'}, status=status.HTTP_400_BAD_REQUEST)
-        return Response({'error': 'Slot is not yours.'}, status=status.HTTP_403_FORBIDDEN)
+            serializer = CreateReviewSerializer(data=request.data, context={'request': request, 'slot': slot})
+            if serializer.is_valid():
+                serializer.save(mentor=slot.mentor, user=user, slot=slot)
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'error': 'Review already exists.'}, status=status.HTTP_400_BAD_REQUEST)
 
     @swagger_auto_schema(
         method='get',

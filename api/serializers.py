@@ -58,10 +58,23 @@ class ReviewSerializer(serializers.ModelSerializer):
 
 
 class CreateReviewSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Review
         fields = ('rating', 'comment')
 
+    def validate(self, attrs):
+        slot = self.context.get('slot')
+        user = self.context['request'].user
+
+        if not slot:
+            raise serializers.ValidationError('Slot not provided to serializer context.')
+
+        # проверяем, что пользователь — участник слота
+        if user != slot.user:  # and user != slot.mentor
+            raise serializers.ValidationError('You can only leave a review for a slot you participated in.')
+
+        return attrs
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
