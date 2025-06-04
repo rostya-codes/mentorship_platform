@@ -994,3 +994,14 @@ Time: 2025-05-27 17:14:35.237799+00:002025-05-27 18:15:59.237467 | GET | /accoun
 2025-06-04 11:35:17 | method=PATCH | path=/api/reviews/1/ | user=rostya | ip=127.0.0.1 | agent=Mozilla/5.0 (X11; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0 | response_time=17ms
 2025-06-04 11:41:05 | method=PATCH | path=/api/reviews/1/ | user=rostya | ip=127.0.0.1 | agent=Mozilla/5.0 (X11; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0 | response_time=104ms
 2025-06-04 11:43:17 | method=PATCH | path=/api/reviews/1/ | user=rostya | ip=127.0.0.1 | agent=Mozilla/5.0 (X11; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0 | response_time=92ms
+2025-06-04 14:15:05 | method=GET | path=/admin/reviews/review/ | user=rostya | ip=127.0.0.1 | agent=Mozilla/5.0 (X11; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0 | response_time=173ms
+2025-06-04 14:15:06 | method=GET | path=/admin/jsi18n/ | user=rostya | ip=127.0.0.1 | agent=Mozilla/5.0 (X11; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0 | response_time=17ms
+2025-06-04 14:15:06 | method=GET | path=/favicon.ico | user=rostya | ip=127.0.0.1 | agent=Mozilla/5.0 (X11; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0 | response_time=20ms
+2025-06-04 14:15:07 | method=GET | path=/admin/reviews/review/10/change/ | user=rostya | ip=127.0.0.1 | agent=Mozilla/5.0 (X11; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0 | response_time=75ms
+2025-06-04 14:15:07 | method=GET | path=/admin/jsi18n/ | user=rostya | ip=127.0.0.1 | agent=Mozilla/5.0 (X11; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0 | response_time=17ms
+2025-06-04 14:15:39 | method=POST | path=/api/reviews/ | user=rostya | ip=127.0.0.1 | agent=Mozilla/5.0 (X11; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0 | response_time=22ms
+2025-06-04 14:19:27 | method=POST | path=/api/slots/10/review/ | user=rostya | ip=127.0.0.1 | agent=Mozilla/5.0 (X11; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0 | response_time=17ms
+2025-06-04 14:20:54 | method=GET | path=/admin/schedule/slot/ | user=rostya | ip=127.0.0.1 | agent=Mozilla/5.0 (X11; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0 | response_time=47ms
+2025-06-04 14:20:54 | method=GET | path=/admin/jsi18n/ | user=rostya | ip=127.0.0.1 | agent=Mozilla/5.0 (X11; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0 | response_time=17ms
+2025-06-04 14:20:54 | method=GET | path=/favicon.ico | user=rostya | ip=127.0.0.1 | agent=Mozilla/5.0 (X11; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0 | response_time=22ms
+2025-06-04 14:21:06 | method=POST | path=/api/slots/12/review/ | user=rostya | ip=127.0.0.1 | agent=Mozilla/5.0 (X11; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0 | response_time=107ms

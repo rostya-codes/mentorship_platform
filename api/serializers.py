@@ -97,6 +97,9 @@ class CreateReviewSerializer(serializers.ModelSerializer):
         if len(comment) >= 1000:
             raise TooBigComment('Comment must contains max 1000 symbols.')
 
+        if 1 > rating > 5:
+            raise UnsupportedStarsAmount('Stars must be from 1 to 5.')
+
         return attrs
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):

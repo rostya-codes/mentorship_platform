@@ -24,3 +24,7 @@ class TooBigComment(Exception):
 
 class EditDeleteExpired(Exception):
     pass
+
+
+class UnsupportedStarsAmount(Exception):
+    pass
