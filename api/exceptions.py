@@ -20,3 +20,7 @@ class TooSmallStars(Exception):
 
 class TooBigComment(Exception):
     pass
+
+
+class EditDeleteExpired(Exception):
+    pass
