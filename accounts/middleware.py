@@ -8,14 +8,13 @@ Middleware — это класс (или функция), который обр�
 """
 from datetime import datetime
 
+import redis
 from django.contrib.auth import get_user_model
 from django.core.exceptions import PermissionDenied
 from django.http import Http404, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils import timezone
-
-import redis
 
 User = get_user_model()
 

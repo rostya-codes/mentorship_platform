@@ -5,7 +5,6 @@ from datetime import datetime, timedelta
 from django.contrib.auth import authenticate, get_user_model
 from django.http import HttpResponse
 from django.utils import timezone
-
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status, viewsets, serializers
 from rest_framework.decorators import action
@@ -26,11 +25,11 @@ from api.serializers import (
     UserProfileSerializer,
     UserSerializer,
 )
-from .exceptions import SlotDoesNotExist, ReviewAlreadyExists, NotYourSlot, CannotLeaveBefore, TooSmallStars, \
-    TooBigComment, UnsupportedStarsAmount
 from api.tasks import send_password_reset
 from reviews.models import Review
 from schedule.models import Slot
+from .exceptions import SlotDoesNotExist, ReviewAlreadyExists, NotYourSlot, CannotLeaveBefore, TooSmallStars, \
+    TooBigComment, UnsupportedStarsAmount
 
 User = get_user_model()
 

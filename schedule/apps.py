@@ -6,4 +6,4 @@ class ScheduleConfig(AppConfig):
     name = 'schedule'
 
     def ready(self):
-        import schedule.signals
+        pass

@@ -3,7 +3,6 @@ from rest_framework.test import APIRequestFactory
 from rest_framework.views import APIView
 
 from ..permissions import IsSuperUser, IsMentor
-from accounts.models import User
 
 
 class DummyView(APIView):

@@ -8,7 +8,6 @@ from django.views import View
 from django.views.generic import ListView
 
 from schedule.models import Slot
-
 from .forms import CreateSlotForm, UpdateSlotForm
 
 User = get_user_model()
