@@ -1,7 +1,6 @@
 from datetime import datetime
 from django.core.exceptions import ValidationError
 from django.utils import timezone
-from reviews.models import Review
 
 
 def validate_review_logic(user, slot, rating, comment, instance=None):
@@ -10,6 +9,7 @@ def validate_review_logic(user, slot, rating, comment, instance=None):
     instance — объект Review при обновлении (чтобы не ловить себя в exists)
     Генерирует ValidationError если что-то не так.
     """
+    from reviews.models import Review
 
     if rating is not None and (rating < 1 or rating > 5):
         raise ValidationError('Rating must be 1 - 5')

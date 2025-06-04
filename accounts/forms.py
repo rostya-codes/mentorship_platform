@@ -7,6 +7,8 @@ from django.contrib.auth.forms import (
 )
 from django.core.exceptions import ValidationError
 
+from accounts.validators import validate_register_logic, validate_login_logic
+
 User = get_user_model()
 
 
@@ -17,12 +19,7 @@ class RegisterForm(UserCreationForm):
         fields = ('username', 'email', 'first_name', 'last_name', 'password1', 'password2')
 
     def clean_username(self):
-        username = self.cleaned_data['username']
-        if ' ' in username:
-            raise ValidationError('Username cannot contain spaces.')
-        if not username.strip():
-            raise ValidationError("Username cannot be empty or contain only spaces.")
-        return username
+        return validate_register_logic(self.cleaned_data['username'])
 
 
 class LoginForm(AuthenticationForm):
@@ -30,25 +27,11 @@ class LoginForm(AuthenticationForm):
     password = forms.CharField(label="Password", widget=forms.PasswordInput(attrs={'class': 'form-control'}))
 
     def clean(self):
-        username_or_email = self.cleaned_data.get('username')
-        password = self.cleaned_data.get('password')
-
-        if username_or_email and password:
-            # Пытаемся найти пользователя по email или username
-            try:
-                user = User.objects.get(email=username_or_email)
-                username = user.username  # конвертируем email → username
-            except User.DoesNotExist:
-                username = username_or_email
-
-            self.user_cache = authenticate(self.request, username=username, password=password)
-
-            if self.user_cache is None:
-                raise ValidationError("Invalid login credentials")
-            else:
-                self.confirm_login_allowed(self.user_cache)
-
-        return self.cleaned_data
+        return validate_login_logic(
+            self.cleaned_data.get('username'),
+            self.cleaned_data.get('password'),
+            instance=self
+        )
 
 
 class UpdateUserForm(UserChangeForm):
