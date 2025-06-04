@@ -1,16 +1,13 @@
-from datetime import datetime
-from django.utils import timezone
-
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import AuthUser, TokenObtainPairSerializer
 from rest_framework_simplejwt.tokens import Token
 
+from common.validators import validate_review_logic
 from reviews.models import Review
 from schedule.models import Slot
-from .exceptions import SlotDoesNotExist, ReviewAlreadyExists, NotYourSlot, CannotLeaveBefore, TooSmallStars, \
-    TooBigComment, UnsupportedStarsAmount
 
 User = get_user_model()
 
@@ -74,31 +71,10 @@ class CreateReviewSerializer(serializers.ModelSerializer):
         rating = attrs.get('rating')
         comment = attrs.get('comment')
 
-        if not slot:
-            raise SlotDoesNotExist('Slot not provided to serializer context.')
-
-        if Review.objects.filter(slot=slot, user=user).exists():
-            raise ReviewAlreadyExists('Review already exists.')
-
-        # проверяем, что пользователь — участник слота
-        if user != slot.user:  # and user != slot.mentor
-            raise NotYourSlot('You can only leave a review for a slot you participated in.')
-
-        now = timezone.now()
-        event_datetime = datetime.combine(slot.date, slot.time)
-        if timezone.is_aware(now):
-            event_datetime = timezone.make_aware(event_datetime, timezone.get_current_timezone())
-        if event_datetime > now:
-            raise CannotLeaveBefore('You cannot leave a review before the slot has ended.')
-
-        if rating <= 2 and len(comment) < 15:
-            raise TooSmallStars('If you give 2 or less stars, you should write why (min 15 symbols).')
-
-        if len(comment) >= 1000:
-            raise TooBigComment('Comment must contains max 1000 symbols.')
-
-        if 1 > rating > 5:
-            raise UnsupportedStarsAmount('Stars must be from 1 to 5.')
+        try:
+            validate_review_logic(user, slot, rating, comment)
+        except ValidationError as exc:
+            raise serializers.ValidationError(str(exc))
 
         return attrs
 

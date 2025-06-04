@@ -3,6 +3,8 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.html import format_html
 
+from schedule.validators import validate_slot_logic
+
 
 class Slot(models.Model):
     mentor = models.ForeignKey(
@@ -31,8 +33,7 @@ class Slot(models.Model):
     get_review_link.short_description = 'Review'
 
     def clean(self):
-        if self.is_booked and not self.user or not self.is_booked and self.user:
-            raise ValidationError('is_booked and user existing is connected fields.')
+        validate_slot_logic(is_booked=self.is_booked, user=self.user)
 
 
 class BookingLog(models.Model):
