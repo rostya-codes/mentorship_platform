@@ -25,7 +25,7 @@ class Review(models.Model):
         to='schedule.Slot', on_delete=models.CASCADE,
         null=True, blank=True, related_name='review_slot'
     )
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return f'{self.pk} M: {self.mentor.username} U: {self.user.username} | stars: {self.rating}'

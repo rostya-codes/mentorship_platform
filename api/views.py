@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 
 from django.contrib.auth import authenticate, get_user_model
 from django.http import HttpResponse
+from django.utils import timezone
 
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status, viewsets, serializers
@@ -177,6 +178,25 @@ class SlotViewSet(viewsets.ModelViewSet):
 class ReviewViewSet(viewsets.ModelViewSet):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
+
+    def destroy(self, request, *args, **kwargs):
+        review = self.get_object()
+        now = timezone.now()
+        if now > review.created_at + timedelta(days=1):
+            return Response({'error': 'You have only 24 hours to delete your review and this time has expired.'},
+                            status=status.HTTP_403_FORBIDDEN)
+        return super().destroy(request, *args, **kwargs)
+
+    def update(self, request, *args, **kwargs):
+        """вызывается только для PUT"""
+        partial = kwargs.get('partial', False)
+        print(partial)
+        review = self.get_object()
+        now = timezone.now()
+        if now > review.created_at + timedelta(days=1):
+            return Response({'error': 'You have only 24 hours to update your review and this time has expired.'},
+                            status=status.HTTP_403_FORBIDDEN)
+        return super().update(request, *args, **kwargs)
 
 
 class AuthViewSet(viewsets.ViewSet):

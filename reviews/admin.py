@@ -16,7 +16,6 @@ class ReviewAdmin(admin.ModelAdmin):
     )
     readonly_fields = (
         'id',
-        'created_at',
     )
     search_fields = (
         'mentor__username',
