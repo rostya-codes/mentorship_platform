@@ -10,7 +10,7 @@ from rest_framework_simplejwt.tokens import Token
 from reviews.models import Review
 from schedule.models import Slot
 from .exceptions import SlotDoesNotExist, ReviewAlreadyExists, NotYourSlot, CannotLeaveBefore, TooSmallStars, \
-    TooBigComment
+    TooBigComment, UnsupportedStarsAmount
 
 User = get_user_model()
 
