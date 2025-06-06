@@ -11,6 +11,9 @@
                     <th>#ID</th>
                     <th>Username</th>
                     <th>Email</th>
+                    <th>Is verified</th>
+                    <th>Is mentor</th>
+                    <th>Is staff</th>
                     <th class="text-center">Status</th>
                     <th class="text-center">Actions</th>
                 </tr>
@@ -21,6 +24,21 @@
                     <td>{{ user.id }}</td>
                     <td>{{ user.username }}</td>
                     <td>{{ user.email }}</td>
+                    {% if user.is_email_verified %}
+                        <td>✅</td>
+                    {% else %}
+                        <td>❌</td>
+                    {% endif %}
+                    {% if user.is_mentor %}
+                        <td>✅</td>
+                    {% else %}
+                        <td>❌</td>
+                    {% endif %}
+                    {% if user.is_staff %}
+                        <td>✅</td>
+                    {% else %}
+                        <td>❌</td>
+                    {% endif %}
                     <td class="text-center">
                         {% if user.is_active %}
                             <span class="badge bg-success">Active</span>
