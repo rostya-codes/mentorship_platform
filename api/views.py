@@ -5,8 +5,9 @@ from datetime import datetime, timedelta
 from django.contrib.auth import authenticate, get_user_model
 from django.http import HttpResponse
 from django.utils import timezone
+
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework import status, viewsets, serializers
+from rest_framework import serializers, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
@@ -28,8 +29,16 @@ from api.serializers import (
 from api.tasks import send_password_reset
 from reviews.models import Review
 from schedule.models import Slot
-from .exceptions import SlotDoesNotExist, ReviewAlreadyExists, NotYourSlot, CannotLeaveBefore, TooSmallStars, \
-    TooBigComment, UnsupportedStarsAmount
+
+from .exceptions import (
+    CannotLeaveBefore,
+    NotYourSlot,
+    ReviewAlreadyExists,
+    SlotDoesNotExist,
+    TooBigComment,
+    TooSmallStars,
+    UnsupportedStarsAmount,
+)
 
 User = get_user_model()
 
@@ -174,6 +183,12 @@ class SlotViewSet(viewsets.ModelViewSet):
         slots = Slot.objects.filter(user=user)
         serializer = SlotSerializer(slots, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+    # @swagger_auto_schema(
+    #     method='get',
+    #     responses={200: }
+    # )
 
 
 class ReviewViewSet(viewsets.ModelViewSet):

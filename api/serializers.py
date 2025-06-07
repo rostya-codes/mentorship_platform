@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
+
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import AuthUser, TokenObtainPairSerializer
 from rest_framework_simplejwt.tokens import Token
@@ -45,7 +46,7 @@ class SlotSerializer(serializers.ModelSerializer):
 class CreateSlotSerializer(serializers.ModelSerializer):
     class Meta:
         model = Slot
-        fields = ['date', 'time', 'mentor']
+        fields = ['date', 'time', 'mentor', 'duration_minutes']
 
 
 class SlotBookSerializer(serializers.Serializer):
@@ -100,3 +101,6 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 class MentorsRatingSerializer(serializers.Serializer):
     average_rating = serializers.FloatField()
     reviews_count = serializers.IntegerField()
+
+
+# class SlotDuration

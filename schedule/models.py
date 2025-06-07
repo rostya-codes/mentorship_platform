@@ -15,6 +15,7 @@ class Slot(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True, related_name='user_bookings')
     date = models.DateField()
     time = models.TimeField()
+    duration_minutes = models.IntegerField(max_length=3, null=True, blank=True, default=60)
     is_booked = models.BooleanField(default=False)
 
     class Meta:

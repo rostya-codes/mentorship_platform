@@ -1,8 +1,9 @@
 from django.test import TestCase
+
 from rest_framework.test import APIRequestFactory
 from rest_framework.views import APIView
 
-from ..permissions import IsSuperUser, IsMentor
+from ..permissions import IsMentor, IsSuperUser
 
 
 class DummyView(APIView):

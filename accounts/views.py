@@ -6,9 +6,11 @@ from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import TemplateView
+
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from api.serializers import MyTokenObtainPairSerializer
+
 from .forms import RegisterForm, UpdateUserForm
 from .tasks import register_email_confirm
 from .utils import decode_uid, encode_uid, generate_token, verify_token

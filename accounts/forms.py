@@ -7,7 +7,7 @@ from django.contrib.auth.forms import (
 )
 from django.core.exceptions import ValidationError
 
-from accounts.validators import validate_register_logic, validate_login_logic
+from accounts.validators import validate_login_logic, validate_register_logic
 
 User = get_user_model()
 
