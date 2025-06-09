@@ -1,3 +1,13 @@
+![Demo screenshot](images/1.png)
+![Demo screenshot](images/2.png)
+![Demo screenshot](images/3.png)
+![Demo screenshot](images/4.png)
+![Demo screenshot](images/5.png)
+![Demo screenshot](images/6.png)
+![Demo screenshot](images/7.png)
+![Demo screenshot](images/8.png)
+![Demo screenshot](images/9.png)
+
 💡 Ідея: Платформа для менторства / консультацій
 
 Сайт, де користувачі можуть записуватись на онлайн-сесії з менторами (наприклад, по програмуванню, фітнесу, інвестиціях).

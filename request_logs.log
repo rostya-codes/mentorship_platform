@@ -1071,3 +1071,10 @@ Time: 2025-05-27 17:14:35.237799+00:002025-05-27 18:15:59.237467 | GET | /accoun
 2025-06-06 19:01:21 | method=GET | path=/swagger/ | user=rostya | ip=127.0.0.1 | agent=Mozilla/5.0 (X11; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0 | response_time=74ms
 2025-06-06 19:02:12 | method=POST | path=/api/create-slot/ | user=rostya | ip=127.0.0.1 | agent=Mozilla/5.0 (X11; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0 | response_time=93ms
 2025-06-06 19:02:35 | method=POST | path=/api/create-slot/ | user=rostya | ip=127.0.0.1 | agent=Mozilla/5.0 (X11; Linux x86_64; rv:138.0) Gecko/20100101 Firefox/138.0 | response_time=39ms
+2025-06-09 15:48:32 | method=GET | path=/ | user=Anonymous | ip=127.0.0.1 | agent=Mozilla/5.0 (X11; Linux x86_64; rv:139.0) Gecko/20100101 Firefox/139.0 | response_time=16ms
+2025-06-09 15:48:32 | method=GET | path=/media/accounts_images/my_bs_KmBz1lJ.jpg | user=Anonymous | ip=127.0.0.1 | agent=Mozilla/5.0 (X11; Linux x86_64; rv:139.0) Gecko/20100101 Firefox/139.0 | response_time=2ms
+2025-06-09 15:48:32 | method=GET | path=/favicon.ico | user=Anonymous | ip=127.0.0.1 | agent=Mozilla/5.0 (X11; Linux x86_64; rv:139.0) Gecko/20100101 Firefox/139.0 | response_time=7ms
+2025-06-09 15:48:34 | method=GET | path=/ws/chatroom/g5WcoUoMgGVpJfho8snUAK | user=Anonymous | ip=127.0.0.1 | agent=Mozilla/5.0 (X11; Linux x86_64; rv:139.0) Gecko/20100101 Firefox/139.0 | response_time=6ms
+2025-06-09 15:48:35 | method=GET | path=/ | user=Anonymous | ip=127.0.0.1 | agent=Mozilla/5.0 (X11; Linux x86_64; rv:139.0) Gecko/20100101 Firefox/139.0 | response_time=5ms
+2025-06-09 15:48:53 | method=GET | path=/ws/chatroom/g5WcoUoMgGVpJfho8snUAK | user=Anonymous | ip=127.0.0.1 | agent=Mozilla/5.0 (X11; Linux x86_64; rv:139.0) Gecko/20100101 Firefox/139.0 | response_time=8ms
+2025-06-09 15:48:53 | method=GET | path=/ws/chatroom/g5WcoUoMgGVpJfho8snUAK | user=Anonymous | ip=127.0.0.1 | agent=Mozilla/5.0 (X11; Linux x86_64; rv:139.0) Gecko/20100101 Firefox/139.0 | response_time=14ms
