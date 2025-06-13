@@ -26,11 +26,13 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'drf_yasg',
+    'channels',
 
     'api',
     'main',
     'accounts',
     'dashboard',
+    'chat',
     'schedule.apps.ScheduleConfig',
     'reviews.apps.ReviewsConfig',
 ]
@@ -72,6 +74,15 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'mentorship_platform.wsgi.application'
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    },
+}
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
@@ -129,6 +140,8 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
     # ... другие настройки ...
 }
+
+ASGI_APPLICATION = 'mentorship_platform.asgi.application'
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
