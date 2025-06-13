@@ -5,8 +5,6 @@ from django.db import models
 
 class Chatroom(models.Model):
     unique_name = models.CharField(max_length=128, unique=True, default=shortuuid.uuid)
-    name = models.CharField(max_length=128, null=True, blank=True)
-
     members = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='chats')
     users_online = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='users_online', blank=True)
 
