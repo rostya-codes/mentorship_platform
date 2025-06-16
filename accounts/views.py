@@ -1,7 +1,8 @@
 from django.contrib import messages
 from django.contrib.auth import get_user_model, login, logout
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect, render
+from django.contrib.auth.views import redirect_to_login
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views import View
@@ -79,6 +80,19 @@ class ProfileView(View):
             form.save()
             return redirect('profile')
         return render(request, 'accounts/profile.html', {'form': form})
+
+
+@method_decorator(login_required, name='dispatch')
+class UserProfileView(View):
+    def get(self, request, username=None):
+        if username:
+            profile = get_object_or_404(User, username=username)
+        try:
+            profile = request.user
+        except:
+            return redirect_to_login(request.get_full_path())
+        return render(request, 'accounts/user_profile.html',
+                      {'profile': profile})
 
 
 @login_required(login_url='login')

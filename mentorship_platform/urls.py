@@ -29,6 +29,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('main.urls')),
     path('accounts/', include('accounts.urls')),
+    path('chat/', include('chat.urls')),
     path('schedule/', include('schedule.urls')),
     path('dashboard/', include('dashboard.urls')),
     path('reviews/', include('reviews.urls')),

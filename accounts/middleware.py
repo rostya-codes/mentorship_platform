@@ -114,30 +114,30 @@ class RequestsLimitMiddleware:
     Uses Redis to store request counters.
     """
 
-    LIMIT = 30
+    LIMIT = 120
     PERIOD = 60
 
     def __init__(self, get_response):
-        print("Middleware initialized")
+        # print("Middleware initialized")
         self.get_response = get_response
         self.redis = redis.Redis(host='localhost', port=6379, db=0)
 
     def __call__(self, request):
         client_id = self.get_client_id(request)
         redis_key = f'rl:{client_id}'
-        print(f"\n--- New request ---")
-        print(f"Client IP: {client_id}")
-        print(f"Redis key: {redis_key}")
+        # print(f"\n--- New request ---")
+        # print(f"Client IP: {client_id}")
+        # print(f"Redis key: {redis_key}")
 
         try:
             # Increase the request counter for this client in Redis
             current = self.redis.incr(redis_key)
-            print(f'Limit of requests: {self.LIMIT} per {self.PERIOD} seconds.')
-            print(f"Current number of requests for this client: {current}")
+            # print(f'Limit of requests: {self.LIMIT} per {self.PERIOD} seconds.')
+            # print(f"Current number of requests for this client: {current}")
             # If this is the first request, set the expiration time for the key
             if current == 1:
                 self.redis.expire(redis_key, self.PERIOD)
-                print(f"Set expire for key {redis_key}: {self.PERIOD} seconds")
+                # print(f"Set expire for key {redis_key}: {self.PERIOD} seconds")
         except redis.exceptions.ConnectionError:
             # If Redis is unavailable, just let the request pass (or you can return an error)
             print("Redis is unavailable! Passing the request without limiting.")
@@ -146,8 +146,8 @@ class RequestsLimitMiddleware:
         # If the request limit is exceeded, return HTTP 429
         if current > self.LIMIT:
             retry_after = self.redis.ttl(redis_key)
-            print(f"Limit exceeded! Current: {current}, Limit: {self.LIMIT}")
-            print(f"Seconds until the limit resets: {retry_after}")
+            # print(f"Limit exceeded! Current: {current}, Limit: {self.LIMIT}")
+            # print(f"Seconds until the limit resets: {retry_after}")
             return JsonResponse(
                 {
                     'error': 'Too Many Requests',
@@ -158,7 +158,7 @@ class RequestsLimitMiddleware:
                 headers={'Retry-After': str(retry_after)}
             )
         # If the limit is not exceeded, continue processing the request
-        print("Limit not exceeded, request passes through.")
+        # print("Limit not exceeded, request passes through.")
         return self.get_response(request)
 
     def get_client_id(self, request):
@@ -166,10 +166,10 @@ class RequestsLimitMiddleware:
         x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
         if x_forwarded_for:
             ip = x_forwarded_for.split(',')[0]
-            print(f"IP from X-Forwarded-For: {ip}")
+            # print(f"IP from X-Forwarded-For: {ip}")
         else:
             ip = request.META.get('REMOTE_ADDR')
-            print(f"IP from REMOTE_ADDR: {ip}")
+            # print(f"IP from REMOTE_ADDR: {ip}")
         return ip
 
 

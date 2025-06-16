@@ -10,8 +10,8 @@ class ChatMessageCreateForm(forms.ModelForm):
         widgets = {
             'body': forms.TextInput(attrs={
                 'placeholder': 'Aa',
-                'class': 'p-4 text-blank',
-                'maxlenght': '300',
+                'class': 'p-4 text-black text-lg',
+                'maxlength': '300',
                 'autofocus': True
             }),
         }

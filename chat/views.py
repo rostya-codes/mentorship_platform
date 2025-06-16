@@ -1,9 +1,12 @@
+from django.contrib.auth import get_user_model
 from django.http import Http404
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import get_object_or_404, redirect, render
 from django.views import View
 
 from chat.forms import ChatMessageCreateForm
 from chat.models import Chatroom
+
+User = get_user_model()
 
 
 class ChatView(View):
@@ -44,3 +47,29 @@ class ChatView(View):
             'chatroom': chatroom,
         }
         return render(request, 'chat/chat.html', context)
+
+
+class StartChatView(View):
+    def get(self, request, username):
+        if request.user.username == username:
+            return redirect('my-notes')
+
+        other_user = User.objects.get(username=username)
+        my_chatrooms = request.user.chats.all()
+        if my_chatrooms.exists():
+            for chatroom in my_chatrooms:
+                if other_user in chatroom.members.all():
+                    chatroom = chatroom
+                    break
+                else:
+                    chatroom = Chatroom.objects.create()
+                    chatroom.members.add(other_user, request.user)
+        else:
+            chatroom = Chatroom.objects.create()
+            chatroom.members.add(other_user, request.user)
+
+        return redirect('chatroom', chatroom.unique_name)
+
+
+class MyNotesView(View):
+    pass

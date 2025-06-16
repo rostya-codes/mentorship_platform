@@ -16,6 +16,8 @@ SITE_DOMAIN = 'http://127.0.0.1:8000'
 LOGIN_URL = '/accounts/login/'
 
 INSTALLED_APPS = [
+    'daphne',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -27,6 +29,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'drf_yasg',
     'channels',
+    'django_htmx',
 
     'api',
     'main',
@@ -53,6 +56,7 @@ MIDDLEWARE = [
     'accounts.middleware.SaveLastActiveTimeMiddleware',
     'accounts.middleware.InsertHeadersOrCookiesMiddleware',
     'accounts.middleware.RequestsLimitMiddleware',
+    'django_htmx.middleware.HtmxMiddleware',
 ]
 
 ROOT_URLCONF = 'mentorship_platform.urls'

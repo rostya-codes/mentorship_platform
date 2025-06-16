@@ -16,6 +16,7 @@ urlpatterns = [
     ),
     path('logout/', views.logout_user, name='logout'),
     path('profile/', views.ProfileView.as_view(), name='profile'),
+    path('user-profile/<str:username>', views.UserProfileView.as_view(), name='user-profile'),
     path('blocked_page/', views.BlockedPage.as_view(), name='blocked_page'),
 
     # Email verification

@@ -1,10 +1,13 @@
 import json
 
-from asgiref.sync import sync_to_async
-from channels.generic.websocket import AsyncWebsocketConsumer
 from django.template.loader import render_to_string
 
+from asgiref.sync import sync_to_async
+from channels.exceptions import DenyConnection
+from channels.generic.websocket import AsyncWebsocketConsumer
+
 from chat.models import Chatroom, Message
+
 
 class ChatConsumer(AsyncWebsocketConsumer):
     """ Main chat messages async consumer """
@@ -13,7 +16,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
         self.user = self.scope['user']
         self.chatroom_unique_name = self.scope['url_route']['kwargs']['room_name']
 
-        self.chatroom, created = await sync_to_async(Chatroom.objects.get_or_create)(unique_name=self.chatroom_unique_name)
+        try:
+            self.chatroom= await sync_to_async(Chatroom.objects.get)(unique_name=self.chatroom_unique_name)
+        except Chatroom.DoesNotExist:
+            raise DenyConnection('Chatroom does not exist')
 
         # Присоединяемся к группе
         await self.channel_layer.group_add(
@@ -35,8 +41,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
             await sync_to_async(self.chatroom.users_online.remove)(self.user)
 
     async def receive(self, text_data=None):
+        print(f'log text_data: {text_data}')
         data = json.loads(text_data)
+        print(f'log data: {data}')
         body = data['body']
+        print(f'log body: {body}')
         message = await sync_to_async(Message.objects.create)(body=body, author=self.user, chat=self.chatroom)
         event = {
             'type': 'message_handler',
@@ -45,6 +54,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await self.channel_layer.group_send(self.chatroom_unique_name, event)
 
     async def message_handler(self, event):
+        print('message_handler 1')
         message_id = event['message_id']
         message = await sync_to_async(Message.objects.get)(pk=message_id)
         context = {
@@ -53,6 +63,17 @@ class ChatConsumer(AsyncWebsocketConsumer):
             'chatroom': self.chatroom,
         }
         html = await sync_to_async(render_to_string)(
-            'chat/partials/chat_message_p.html', context=context
+            'chat/partials/chat-message-p.html', context=context
         )
+        print('message_handler 2')
         await self.send(text_data=html)
+
+
+class OnlineStatusConsumer(AsyncWebsocketConsumer):
+    async def connect(self):
+        await self.accept()
+        # тут логіка онлайна
+
+    async def disconnect(self, close_code):
+        # тут логіка при виході
+        pass
