@@ -21,35 +21,32 @@
     <script src="https://unpkg.com/hyperscript.org@0.9.14"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+    <style>
+    body { padding-top: 30px; }
+    </style>
 </head>
 
 <body>
 
     <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+    <nav class="navbar navbar-light bg-light shadow-sm fixed-top">
         <div class="container">
             <a class="navbar-brand fw-bold" href="{% url 'index' %}">Mentorship Platform</a>
-            <!-- Toggler button for collapsed menu on small screens -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                <div class="d-flex flex-column flex-lg-row gap-2">
-                    {% if user.is_authenticated %}
-                        {% if user.is_mentor %}
-                            <a class="btn btn-outline-secondary btn-sm" href="{% url 'dashboard' %}">Dashboard</a>
-                        {% endif %}
-                        <a class="btn btn-primary btn-sm" href="{% url 'profile' %}">Profile</a>
-                        <a class="btn btn-danger btn-sm" href="{% url 'logout' %}">Logout</a>
-                    {% else %}
-                        <a class="btn btn-outline-primary btn-sm" href="{% url 'login' %}">Log in</a>
-                        <a class="btn btn-success btn-sm" href="{% url 'register' %}">Register</a>
+            <div class="d-flex flex-row gap-2 ms-auto">
+                {% if user.is_authenticated %}
+                    {% if user.is_mentor %}
+                        <a class="btn btn-outline-secondary btn-sm" href="{% url 'dashboard' %}">Dashboard</a>
                     {% endif %}
-                </div>
+                    <a class="btn btn-primary btn-sm" href="{% url 'profile' %}">Profile</a>
+                    <a class="btn btn-danger btn-sm" href="{% url 'logout' %}">Logout</a>
+                {% else %}
+                    <a class="btn btn-outline-primary btn-sm" href="{% url 'login' %}">Log in</a>
+                    <a class="btn btn-success btn-sm" href="{% url 'register' %}">Register</a>
+                {% endif %}
             </div>
         </div>
     </nav>
+
 
     <div class="container mt-3">
         {% if messages %}

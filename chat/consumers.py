@@ -41,11 +41,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
             await sync_to_async(self.chatroom.users_online.remove)(self.user)
 
     async def receive(self, text_data=None):
-        print(f'log text_data: {text_data}')
         data = json.loads(text_data)
-        print(f'log data: {data}')
         body = data['body']
-        print(f'log body: {body}')
         message = await sync_to_async(Message.objects.create)(body=body, author=self.user, chat=self.chatroom)
         event = {
             'type': 'message_handler',
@@ -54,7 +51,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await self.channel_layer.group_send(self.chatroom_unique_name, event)
 
     async def message_handler(self, event):
-        print('message_handler 1')
         message_id = event['message_id']
         message = await sync_to_async(Message.objects.get)(pk=message_id)
         context = {
@@ -65,8 +61,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
         html = await sync_to_async(render_to_string)(
             'chat/partials/chat-message-p.html', context=context
         )
-        print('message_handler 2')
-        await self.send(text_data=html)
+        await self.send(text_data=json.dumps({
+            'body': html,
+            'target': '#chat_messages',
+            'swap': 'beforeend'
+        }))
 
 
 class OnlineStatusConsumer(AsyncWebsocketConsumer):
