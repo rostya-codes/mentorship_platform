@@ -7,6 +7,7 @@ Middleware — это класс (или функция), который обр�
     Выполнять "глобальные" проверки (например, аутентификацию, логирование, ограничение по времени и т.д.).
 """
 from datetime import datetime
+import hashlib
 
 from django.contrib.auth import get_user_model
 from django.core.exceptions import PermissionDenied
@@ -187,3 +188,51 @@ class CustomErrorPagesMiddleware:
         except Exception:
             return render(request, '500.html', status=500)
         return response
+
+
+class RequestFingerprintMiddleware:
+    """
+        Middleware для фиксации и проверки 'отпечатка' пользователя на основе IP и user-agent.
+        Logout если меняется user-agent
+    """
+
+    FINGERPRINT_KEY = '_request_fingerprint'
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        # Получаем значения для отпечатка
+        ip = self._get_ip(request)
+        user_agent = request.META.get('HTTP_USER_AGENT', '')
+        # Можно добавить и другие параметры, например, cookie или language
+        raw_fingerprint = f'{ip}|{user_agent}'
+        fingerprint = hashlib.sha256(raw_fingerprint.encode()).hexdigest()
+        session = getattr(request, 'session', None)
+
+        # Если сессии нет (например, для анонимных пользователей без cookies), пропускаем
+        if session is not None:
+            stored_fp = session.get(self.FINGERPRINT_KEY)
+            if stored_fp is None:
+                # Первый запрос — сохраняем отпечаток
+                session[self.FINGERPRINT_KEY] = fingerprint
+            else:
+                if stored_fp != fingerprint:
+                    # Отпечаток изменился — можно разлогинить, залогировать или выдать предупреждение
+                    # Например, разлогиним пользователя:
+                    from django.contrib.auth import logout
+                    logout(request)
+                    session.flush()  # очищает сессию
+                    from django.http import HttpResponseForbidden
+                    return HttpResponseForbidden('Session fingerprint mismatch detected. You have been logged out for security reasons.')
+        response = self.get_response(request)
+        return response
+
+    def _get_ip(self, request):
+        # Попробуем корректно вытащить IP даже если есть прокси
+        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+        if x_forwarded_for:
+            ip = x_forwarded_for.split(',')[0].strip()
+        else:
+            ip = request.META.get('REMOTE_ADDR', '')
+        return ip

@@ -44,6 +44,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
         data = json.loads(text_data)
         body = data['body']
         message = await sync_to_async(Message.objects.create)(body=body, author=self.user, chat=self.chatroom)
+        print("Received data:", data)
+        print("User:", self.user)
+        print("Chatroom:", self.chatroom)
         event = {
             'type': 'message_handler',
             'message_id': message.id,

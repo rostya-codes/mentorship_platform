@@ -56,6 +56,8 @@ MIDDLEWARE = [
     'accounts.middleware.SaveLastActiveTimeMiddleware',
     'accounts.middleware.InsertHeadersOrCookiesMiddleware',
     'accounts.middleware.RequestsLimitMiddleware',
+    'accounts.middleware.RequestFingerprintMiddleware',
+
     'django_htmx.middleware.HtmxMiddleware',
 ]
 
