@@ -8,6 +8,7 @@ Middleware — это класс (или функция), который обр�
 """
 from datetime import datetime
 import hashlib
+import time
 
 from django.contrib.auth import get_user_model
 from django.core.exceptions import PermissionDenied
@@ -192,8 +193,8 @@ class CustomErrorPagesMiddleware:
 
 class RequestFingerprintMiddleware:
     """
-        Middleware для фиксации и проверки 'отпечатка' пользователя на основе IP и user-agent.
-        Logout если меняется user-agent
+    Middleware для фиксации и проверки 'отпечатка' пользователя на основе IP и user-agent.
+    Logout если меняется user-agent
     """
 
     FINGERPRINT_KEY = '_request_fingerprint'
@@ -236,3 +237,48 @@ class RequestFingerprintMiddleware:
         else:
             ip = request.META.get('REMOTE_ADDR', '')
         return ip
+
+
+class AntiDoubleSubmitMiddleware:
+    """
+    Middleware для предотвращения повторной отправки одинаковых POST-запросов (anti-double submit).
+    Сохраняет хеш последнего POST-запроса в сессии. Если такой же запрос повторяется в течение короткого времени — блокирует его.
+    """
+
+    SESSION_KEY = '_last_post_hash'
+    TIME_KEY = '_last_post_time'
+    BLOCK_INTERVAL = 10  # секунд, в течение которых повтор считается дубликатом
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        if request.method == 'POST':
+            # Получаем уникальный хеш для этого запроса
+            unique_string = (
+                    request.path +
+                    str(sorted(request.POST.items())) +
+                    str(sorted(request.FILES.items()))  # Сортировка нужна, чтобы порядок полей не влиял на хеш
+            )
+
+            # Создаём криптографический хеш этой строки.
+            # Это важно, чтобы быстро сравнивать содержимое
+            # (а не хранить большие объёмы данных в сессии).
+            post_hash = hashlib.sha256(unique_string.encode()).hexdigest()
+            session = getattr(request, 'session', None)
+            now = time.time()
+
+            if session is not None:
+                last_hash = session.get(self.SESSION_KEY)
+                last_time = session.get(self.TIME_KEY, 0)
+                # Если совпадает хеш и прошло мало времени — считаем дубликатом
+                if last_hash == post_hash and now - last_time < self.BLOCK_INTERVAL:
+                    from django.http import HttpResponse
+                    return HttpResponse('Form was already sent. Please don\'t send it again.')
+
+                # Если дубликата нет — сохраняем новый хеш и время в сессии пользователя.
+                # Это нужно для сравнения при следующем запросе.
+                session[self.SESSION_KEY] = post_hash
+                session[self.TIME_KEY] = now
+
+        return self.get_response(request)
