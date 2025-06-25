@@ -9,15 +9,19 @@ Middleware — это класс (или функция), который обр�
 from datetime import datetime
 import hashlib
 import time
+import re
+import logging
 
 from django.contrib.auth import get_user_model
 from django.core.exceptions import PermissionDenied
-from django.http import Http404, JsonResponse
+from django.http import Http404, JsonResponse, HttpResponseForbidden
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils import timezone
 
 import redis
+
+from .middleware_base import ClientIPMixin
 
 User = get_user_model()
 
@@ -191,7 +195,7 @@ class CustomErrorPagesMiddleware:
         return response
 
 
-class RequestFingerprintMiddleware:
+class RequestFingerprintMiddleware(ClientIPMixin):
     """
     Middleware для фиксации и проверки 'отпечатка' пользователя на основе IP и user-agent.
     Logout если меняется user-agent
@@ -204,7 +208,7 @@ class RequestFingerprintMiddleware:
 
     def __call__(self, request):
         # Получаем значения для отпечатка
-        ip = self._get_ip(request)
+        ip = self.get_client_ip(request)
         user_agent = request.META.get('HTTP_USER_AGENT', '')
         # Можно добавить и другие параметры, например, cookie или language
         raw_fingerprint = f'{ip}|{user_agent}'
@@ -228,15 +232,6 @@ class RequestFingerprintMiddleware:
                     return HttpResponseForbidden('Session fingerprint mismatch detected. You have been logged out for security reasons.')
         response = self.get_response(request)
         return response
-
-    def _get_ip(self, request):
-        # Попробуем корректно вытащить IP даже если есть прокси
-        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-        if x_forwarded_for:
-            ip = x_forwarded_for.split(',')[0].strip()
-        else:
-            ip = request.META.get('REMOTE_ADDR', '')
-        return ip
 
 
 class AntiDoubleSubmitMiddleware:
@@ -281,4 +276,60 @@ class AntiDoubleSubmitMiddleware:
                 session[self.SESSION_KEY] = post_hash
                 session[self.TIME_KEY] = now
 
+        return self.get_response(request)
+
+
+logger = logging.getLogger('sql_injection_protection')
+
+class InstantSQLInjectionBlockMiddleware(ClientIPMixin):
+    """
+    Middleware для мгновенной блокировки/логирования при попытке SQL-инъекции.
+    Проверяет query string и body на подозрительные паттерны.
+    """
+
+    # Список регулярных выражений для поиска типичных SQL-инъекций
+    SQLI_PATTERNS = [
+        r"(?i)(\bOR\b|\bAND\b)\s+\d+=\d+",  # ... OR 1=1, AND 1=1 и т.д.
+        r"(?i)union\s+select",  # UNION SELECT
+        r"(?i)select.+from",  # SELECT ... FROM
+        r"(?i)insert\s+into",  # INSERT INTO
+        r"(?i)drop\s+table",  # DROP TABLE
+        r"(?i)update\s+\w+\s+set",  # UPDATE x SET
+        r"(?i)delete\s+from",  # DELETE FROM
+        r"(?i)--",  # SQL комментарий --
+        r"(?i)\bxp_cmdshell\b",  # xp_cmdshell (MSSQL backdoor)
+        r"(?i)benchmark\s*\(",  # BENCHMARK (MySQL)
+        r"(?i)sleep\s*\(",  # SLEEP (MySQL)
+        r"(?i)information_schema",  # INFORMATION_SCHEMA
+        r"(?i)\bload_file\s*\(",  # LOAD_FILE(
+        r"(?i)\boutfile\b",  # INTO OUTFILE
+        r"(?i)char\([^)]+\)",  # char(ASCII,...)
+        r"(?i)waitfor\s+delay",  # WAITFOR DELAY
+        r"(?i)';?\s*--",  # '; --
+        r"(?i)\";?\s*--",  # "; --
+        r"(?i)\bexec\b",  # exec
+        r"(?i)cast\s*\(",  # cast(
+        r"(?i)having\s+\d+=\d+",  # HAVING 1=1
+    ]
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+        self.compiled_patterns = [re.compile(pattern) for pattern in self.SQLI_PATTERNS]
+
+
+    def __call__(self, request):
+        # Составляем все строки для проверки: query string, POST, URL
+        suspect_sources = []
+        suspect_sources.append(request.get_full_path())
+        suspect_sources.extend([f'{k}={v}' for k, v in request.GET.items()])
+        suspect_sources.extend([f'{k}={v}' for k, v in request.POST.items()])
+
+        # Проверяем на все паттерны
+        for value in suspect_sources:
+            for regex in self.compiled_patterns:
+                if regex.search(value):
+                    user_ip = self.get_client_ip(request)
+                    logger.warning(f'[SQLI BLOCK] IP {user_ip} tried SQL injection: {value}')
+                    # Здесь можно добавить бан IP (например, в Redis или БД)
+                    return HttpResponseForbidden('Suspicious activity detected and blocked.')
         return self.get_response(request)

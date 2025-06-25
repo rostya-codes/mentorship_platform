@@ -58,6 +58,7 @@ MIDDLEWARE = [
     'accounts.middleware.RequestsLimitMiddleware',
     'accounts.middleware.RequestFingerprintMiddleware',
     'accounts.middleware.AntiDoubleSubmitMiddleware',
+    'accounts.middleware.InstantSQLInjectionBlockMiddleware',
 
     'django_htmx.middleware.HtmxMiddleware',
 ]
