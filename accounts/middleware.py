@@ -6,12 +6,15 @@ Middleware — это класс (или функция), который обр�
     Модифицировать ответ, который возвращается пользователю.
     Выполнять "глобальные" проверки (например, аутентификацию, логирование, ограничение по времени и т.д.).
 """
-from datetime import datetime
+import os
+import shutil
+from datetime import datetime, date
 import hashlib
 import time
 import re
 import logging
 
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.exceptions import PermissionDenied
 from django.http import Http404, JsonResponse, HttpResponseForbidden
@@ -333,3 +336,49 @@ class InstantSQLInjectionBlockMiddleware(ClientIPMixin):
                     # Здесь можно добавить бан IP (например, в Redis или БД)
                     return HttpResponseForbidden('Suspicious activity detected and blocked.')
         return self.get_response(request)
+
+
+class DynamicTemplateByHolidayMiddleware:
+    """
+    Middleware для автоматической подмены шаблона по празднику/дате.
+    Например, 1 января — подставить 'new_year.html' вместо стандартного шаблона.
+    """
+
+    # Карта дат в формате (month, day): 'template_name.html'
+    DATE_TO_TEMPLATE = {
+        (1, 1): 'base_new_year.html',  # 1 января — Новогодний шаблон
+        (12, 31): 'base_new_year_eve.html',  # 31 декабря — шаблон для Нового года
+        (3, 8): 'base_womens_day.html',  # 8 марта — Международный женский день
+        (6, 26): 'base_test_today.html',  # Today test
+    }
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+        self._already_swapped = False
+
+    def __call__(self, request):
+        today = date.today()
+        key = (today.month, today.day)
+
+        # Путь до папки с шаблонами. Исправь, если у тебя иначе!
+        template_dir = os.path.join(settings.BASE_DIR, 'templates')
+        base_path = os.path.join(template_dir, 'base.html')
+
+        if key in self.DATE_TO_TEMPLATE and not self._already_swapped:
+            holiday_template = os.path.join(template_dir, self.DATE_TO_TEMPLATE[key])
+            if os.path.exists(holiday_template):
+                backup_path = os.path.join(template_dir, 'base_original.html')
+                if not os.path.exists(backup_path):
+                    shutil.copy2(base_path, backup_path)
+                shutil.copy2(holiday_template, base_path)
+                self._already_swapped = True
+
+        elif self._already_swapped and key not in self.DATE_TO_TEMPLATE:
+            backup_path = os.path.join(template_dir, 'base_original.html')
+            if os.path.exists(backup_path):
+                shutil.copy2(backup_path, base_path)
+                os.remove(backup_path)
+            self._already_swapped = False
+
+        response = self.get_response(request)
+        return response

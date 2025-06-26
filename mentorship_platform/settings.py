@@ -59,6 +59,7 @@ MIDDLEWARE = [
     'accounts.middleware.RequestFingerprintMiddleware',
     'accounts.middleware.AntiDoubleSubmitMiddleware',
     'accounts.middleware.InstantSQLInjectionBlockMiddleware',
+    'accounts.middleware.DynamicTemplateByHolidayMiddleware',
 
     'django_htmx.middleware.HtmxMiddleware',
 ]
