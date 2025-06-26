@@ -363,22 +363,20 @@ class DynamicTemplateByHolidayMiddleware:
         # Путь до папки с шаблонами. Исправь, если у тебя иначе!
         template_dir = os.path.join(settings.BASE_DIR, 'templates')
         base_path = os.path.join(template_dir, 'base.html')
+        backup_path = os.path.join(template_dir, 'base_original.html')
 
-        if key in self.DATE_TO_TEMPLATE and not self._already_swapped:
+        # Если сегодня праздник и шаблон ещё не подменён
+        if key in self.DATE_TO_TEMPLATE:
             holiday_template = os.path.join(template_dir, self.DATE_TO_TEMPLATE[key])
             if os.path.exists(holiday_template):
-                backup_path = os.path.join(template_dir, 'base_original.html')
                 if not os.path.exists(backup_path):
-                    shutil.copy2(base_path, backup_path)
-                shutil.copy2(holiday_template, base_path)
-                self._already_swapped = True
+                    shutil.copy2(base_path, backup_path)  # Создание резервной копии
+                shutil.copy2(holiday_template, base_path)  # Вставка праздничного шаблона в рабочий шаблон
 
-        elif self._already_swapped and key not in self.DATE_TO_TEMPLATE:
-            backup_path = os.path.join(template_dir, 'base_original.html')
-            if os.path.exists(backup_path):
-                shutil.copy2(backup_path, base_path)
-                os.remove(backup_path)
-            self._already_swapped = False
+        # Если сегодня НЕ праздник, а backup существует — всегда восстанавливаем!
+        elif os.path.exists(backup_path):
+            shutil.copy2(backup_path, base_path)
+            os.remove(backup_path)
 
         response = self.get_response(request)
         return response
