@@ -15,6 +15,7 @@ import re
 import logging
 
 from django.conf import settings
+from django.core.cache import cache
 from django.contrib.auth import get_user_model
 from django.core.exceptions import PermissionDenied
 from django.http import Http404, JsonResponse, HttpResponseForbidden
@@ -23,6 +24,7 @@ from django.urls import reverse
 from django.utils import timezone
 
 import redis
+from django.utils.deprecation import MiddlewareMixin
 
 from .middleware_base import ClientIPMixin
 
@@ -380,3 +382,49 @@ class DynamicTemplateByHolidayMiddleware:
 
         response = self.get_response(request)
         return response
+
+
+class CacheAnonymousOnlyMiddleware(MiddlewareMixin):
+    """
+    Middleware для кэширования только для анонимных пользователей.
+    Для авторизованных пользователей работает прозрачно.
+    """
+
+    def process_request(self, request):
+        if request.user.is_authenticated:
+            return None  # не кэшируем, пропускаем дальше
+
+        # Не кэшируем media/static
+        if request.path.startswith('/media/') or request.path.startswith('/static/'):
+            return None
+
+        # Создаём уникальный ключ на основе URL и параметров запроса
+        cache_key = self._make_cache_key(request)
+        print(f"Anon cache key: {cache_key}")
+        response = cache.get(cache_key)
+        if response is not None:
+            return response  # отдаём закэшированный ответ
+
+        # Добавляем ключ к запросу для process_response
+        request._anon_cache_key = cache_key
+        return None
+
+    def process_response(self, request, response):
+        if getattr(request, 'user', None) and request.user.is_authenticated:
+            return response  # не кэшируем
+
+        # Не кэшируем media/static
+        if request.path.startswith('/media/') or request.path.startswith('/static/'):
+            return response
+
+        cache_key = getattr(request, '_anon_cache_key', None)
+        if cache_key and response.status_code == 200:
+            # Кэшируем только успешные ответы
+            cache.set(cache_key, response, timeout=60 * 5)
+        return response
+
+    def _make_cache_key(self, request):
+        url = request.build_absolute_uri()
+        # Можно добавить сюда дополнительные параметры, если нужно
+        key = f'anon-cache:{hashlib.md5(url.encode()).hexdigest()}'
+        return key

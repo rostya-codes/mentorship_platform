@@ -60,6 +60,7 @@ MIDDLEWARE = [
     'accounts.middleware.AntiDoubleSubmitMiddleware',
     'accounts.middleware.InstantSQLInjectionBlockMiddleware',
     'accounts.middleware.DynamicTemplateByHolidayMiddleware',
+    'accounts.middleware.CacheAnonymousOnlyMiddleware',
 
     'django_htmx.middleware.HtmxMiddleware',
 ]
